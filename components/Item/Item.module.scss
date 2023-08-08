@@ -1,0 +1,46 @@
+@import '../../app/variables.scss';
+
+.imgBg{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.buyBtnAndPrice{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 18px;
+    font-weight: 600px;
+    margin: 20px;
+}
+
+.title{
+    font-size: 18px;
+    font-weight: 600px;
+    margin: 0 20px;
+    transition: color .2s;
+    &:hover{
+        color: $contrast-color;
+    }
+    cursor: pointer;
+}
+
+.addToCart{
+    padding: 12px 22px;
+    border-radius: 50px;
+    border: 1px solid $base-color;
+    background-color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    &:hover{
+        border-color: $contrast-color;
+        background-color: $contrast-color;
+        color: #fff;
+    }
+}

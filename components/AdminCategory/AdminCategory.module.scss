@@ -1,0 +1,12 @@
+.container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1%;
+    width: 60%;
+    height: 80px;
+    margin: .5%;
+    font-size: 18px;
+    font-weight: 600;
+}

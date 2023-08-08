@@ -1,0 +1,21 @@
+.sliderImgContainer{
+    max-width: 1280px;
+    height: auto;
+    position: relative;
+    margin-top: 2%;
+}
+
+.leftArrow, .rightArrow{
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%);
+    z-index: 1;
+    cursor: pointer;
+}
+
+.leftArrow{
+    left: 0;
+}
+.rightArrow{
+    right: 0;
+}

@@ -44,3 +44,23 @@
         color: #fff;
     }
 }
+
+@media(max-width: 500px){
+    .addToCart{
+        padding: 8px 14px;
+    }
+    .title{
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+    .imgBg{
+        padding: 0;
+        img{
+            margin: 10px;
+        }
+    }
+    .buyBtnAndPrice{
+        font-size: 16px;
+        margin: 10px;
+    }
+}

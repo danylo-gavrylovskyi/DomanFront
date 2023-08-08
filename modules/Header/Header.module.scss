@@ -12,6 +12,15 @@
     font-size: 16px;
 }
 
+.hamburgerMenu{
+    display: none;
+    transition: fill .2s;
+    cursor: pointer;
+    &:hover{
+        fill: $contrast-color;
+    }
+}
+
 .container{
     display: flex;
     flex-direction: row;
@@ -22,18 +31,40 @@
     padding: 0 20px;
 }
 
-.centerFlex{
+.centerFlex, .profileBtn{
     display: flex;
     align-items: center;
     flex-direction: row;
 }
 
+.profileBtn{
+    margin-right: 10%;
+}
+
+.profileSvg, .cartSvg{
+    margin-right: 10px;
+    transition: fill .2s;
+}
+
+.cartSvg path{
+    transition: stroke .2s;
+}
+
 .userBtns{
+    width: 21%;
     cursor: pointer;
     span{
         transition: all 0.1s;
         &:hover{
             color: $contrast-color;
+            .profileSvg{
+                    fill: $contrast-color;
+            }
+            .cartSvg{
+                path{
+                    stroke: $contrast-color;
+                }
+            }
         }
     }
 }
@@ -65,7 +96,8 @@
 }
 
 .search{
-    width: 320px;
+    padding: 0 2px;
+    width: 20vw;
     height: 40px;
     border: 1px solid $base-color;
     border-radius: 20px;
@@ -84,6 +116,47 @@
     }
 }
 
+.link{
+    width: 14%;
+}
+
+.mobileSearch{
+    display: none;
+    margin-right: 25px;
+    path{
+        transition: stroke .2s;
+    }
+    &:hover{
+        path{
+            stroke: $contrast-color;
+        }
+    }
+}
+
+@media (max-width: 1300px){
+    .userBtns{
+        width: 38%;
+    }
+}
+
+@media (max-width: 740px){
+    .categoryBtn{
+        display: none;
+    }
+    .userBtns{
+        width: 40%;
+    }
+    .hamburgerMenu, .mobileSearch{
+        display: block;
+    }
+    .link{
+        width: 25%;
+    }
+    .search{
+        display: none;
+    }
+}
+
 .categoriesDropdown{
     box-sizing: border-box;
     position: absolute;
@@ -97,4 +170,10 @@
     column-gap: 2%;
     padding: 15px;
     cursor: default;
+}
+
+@media (max-width: 740px){
+    .iconText{
+        display: none;
+    }
 }

@@ -3,6 +3,9 @@
     height: auto;
     position: relative;
     margin-top: 2%;
+    img{
+        min-height: 150px;
+    }
 }
 
 .leftArrow, .rightArrow{

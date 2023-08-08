@@ -6,7 +6,7 @@ export const Footer = () => {
   return (
     <footer className={styles.container}>
       <div className={styles.sections}>
-        <section style={{ marginLeft: "10%" }}>
+        <section>
           <b>Додаткова інформація</b>
           <span>Оплата і доставка</span>
           <span>Повернення та обмін товару</span>
@@ -110,7 +110,7 @@ export const Footer = () => {
             adress
           </span>
         </section>
-        <section style={{ marginRight: "10%" }}>
+        <section>
           <b>Графік роботи</b>
           <span>
             Понеділок - П'ятниця<br></br>з 9:00 до 17:00

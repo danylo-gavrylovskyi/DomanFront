@@ -5,7 +5,7 @@ import styles from "./AutoplaySlider.module.scss";
 export const AutoplaySlider = () => {
   return (
     <div className={styles.sliderImgContainer}>
-      <img width={"100%"} height={'auto'} alt="banner" src="/banner.jpg"></img>
+      <img width={"100%"} alt="banner" src="/banner.jpg"></img>
       <svg
         className={styles.leftArrow}
         width="50px"

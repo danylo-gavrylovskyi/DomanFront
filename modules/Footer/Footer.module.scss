@@ -1,9 +1,9 @@
-@import '../../app/variables.scss';
+@import '../../app/variables.scss'; 
 
 .container{
-    margin-top: 5%;
+    margin-top: 5vh;
     background-color: $base-color;
-    height: 300px;
+    min-height: 300px;
     width: 100%;
     display: flex;
     align-items:center;
@@ -16,7 +16,8 @@
         margin-bottom: 10%;
     }
     svg{
-        margin-right: 10%;
+        width: 20px;
+        margin-right: 10px;
     }
 
     section{
@@ -45,5 +46,27 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    width: 100%;
+    width: 80%;
+    margin: 4% 0;
+}
+
+@media (max-width: 900px){
+    .sections{
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        row-gap: 5vh;
+
+        section{
+            width: 57vw;
+        }
+    }
+}
+
+@media (max-width: 450px){
+    .sections{
+        section{
+            width: 70vw;
+        }
+    }
 }

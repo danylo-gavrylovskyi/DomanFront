@@ -17,14 +17,10 @@
     }
 }
 
-@media (max-width: 490px){
-    .mainGrid{
-        grid-template-columns: 1fr;
-    }
-}
 
 .container{
     margin-top: 2%;
+    width: 90%;
     max-width: 1280px;
     text-align: center;
 }

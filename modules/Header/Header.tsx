@@ -7,8 +7,10 @@ import { Paper } from "@mui/material";
 
 import { changeCartStatus } from "../../redux/features/cartSlice";
 import { setIsCategClicked } from "@/redux/features/homeSlice";
-import { setIsSearchOpened } from "@/redux/features/headerSlice";
+import { setIsSearchOpened, toggleHamburgerMenu } from "@/redux/features/headerSlice";
 import { RootState } from "@/redux/store";
+
+import { Category } from "@/types/Category";
 
 import { MobileSearch } from "../MobileSearch/MobileSearch";
 import { DropdownCategory } from "@/components/DropdownCategory/DropdownCategory";
@@ -16,14 +18,19 @@ import { DropdownCategory } from "@/components/DropdownCategory/DropdownCategory
 import styles from "./Header.module.scss";
 
 export const Header = () => {
-	const isCategoriesClicked = useSelector((state: RootState) => state.home.isCategoriesClicked);
-	const isSearchOpened = useSelector((state: RootState) => state.header.isSearchOpened);
+	const isCategoriesClicked: boolean = useSelector(
+		(state: RootState) => state.home.isCategoriesClicked
+	);
 	const dispatch = useDispatch();
+	const categories: Category[] = useSelector(
+		(state: RootState) => state.adminCategories.categories
+	);
 	return (
 		<header className={styles.header}>
 			<MobileSearch />
 			<div className={styles.container}>
 				<svg
+					onClick={() => dispatch(toggleHamburgerMenu())}
 					className={styles.hamburgerMenu}
 					fill="#fff"
 					width="25px"
@@ -58,12 +65,9 @@ export const Header = () => {
 						elevation={3}
 						style={!isCategoriesClicked ? { visibility: "hidden", opacity: "0" } : {}}
 						className={styles.categoriesDropdown}>
-						<DropdownCategory></DropdownCategory>
-						<DropdownCategory></DropdownCategory>
-						<DropdownCategory></DropdownCategory>
-						<DropdownCategory></DropdownCategory>
-						<DropdownCategory></DropdownCategory>
-						<DropdownCategory></DropdownCategory>
+						{categories.map((category: Category) => (
+							<DropdownCategory key={category.id} {...category} />
+						))}
 					</Paper>
 				</section>
 				<div className={styles.search}>

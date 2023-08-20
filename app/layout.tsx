@@ -5,12 +5,13 @@ import { Inter } from "next/font/google";
 import { ReduxProvider } from "@/redux/provider";
 import { LayoutProvider } from "@/components/LayoutProvider";
 import { Cart } from "@/modules/Cart/Cart";
+import { HamburgerMenu } from "@/modules/HamburgerMenu/HamburgerMenu";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
 	title: "Doman",
-	description: "Discription",
+	description: "Description",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -20,6 +21,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 			<ReduxProvider>
 				<body className={inter.className}>
 					<Cart />
+					<HamburgerMenu />
 					<LayoutProvider />
 					{children}
 				</body>

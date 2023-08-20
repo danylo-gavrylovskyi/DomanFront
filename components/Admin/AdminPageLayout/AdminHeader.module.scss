@@ -1,11 +1,22 @@
-@import '../../variables.scss';
+@import '../../../app/variables.scss';
 
 .header{
-    height: 8%;
+    width: 100%;
+    height: 8vh;
+    form{
+    height: 100%;
     background-color: $base-color;
     border-radius: 5px;
     display: flex;
     align-items: center;
+
+    .creating{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
 
     button{
         background-color: $admin-base-color;
@@ -14,7 +25,7 @@
         border-radius: 20px;
         height: 70%;
         width: 20%;
-        margin-left: 20px;
+        margin: 0 20px;
         font-size: 18px;
         cursor: pointer;
         transition: background-color .2s;
@@ -23,10 +34,12 @@
         }
     }
 
+    input[type=file]{
+        display: none;
+    }
+
     input{
-        visibility: hidden;
-        margin-left: 10%;
-        width: 30%;
+        width: 20%;
         height: 50%;
         background-color: $base-color;
         color: #fff;
@@ -42,23 +55,34 @@
         }
     }
 
-    label{
-        visibility: hidden;
+    .loadImg{
+        margin-right: 20px;
         display: flex;
         justify-content: center;
         align-items: center;
         color: white;
-        margin-left: 10%;
-        width: 25%;
+        width: 30%;
         height: 50%;
         background-color: $admin-base-color;
         border-radius: 10px;
-        font-size: 18px;
         transition: background-color .2s;
         cursor: pointer;
         &:hover{
             background-color: rgb(0, 52, 78);
         }
+    }
+
+    label{
+        font-size: 18px;
+    }
+}
+}
+
+
+.select{
+    width: 25%;
+    svg{
+        fill: white
     }
 }
 

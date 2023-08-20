@@ -8,7 +8,7 @@ import styles from "./MobileSearch.module.scss";
 
 export const MobileSearch = () => {
 	const dispatch = useDispatch();
-	const isSearchOpened = useSelector((state: RootState) => state.header.isSearchOpened);
+	const isSearchOpened: boolean = useSelector((state: RootState) => state.header.isSearchOpened);
 
 	return (
 		<>

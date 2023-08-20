@@ -1,12 +1,16 @@
-import React from 'react'
+import React from "react";
 
-import styles from './DropdownCategory.module.scss'
+import { Category } from "@/types/Category";
 
-export const DropdownCategory = () => {
-  return (
-    <div className={styles.container}>
-        <img width='20%' src='/category.png'></img>
-        <p>Рушникосушки</p>
-    </div>
-  )
-}
+import styles from "./DropdownCategory.module.scss";
+
+export const DropdownCategory = ({ title, image }: Category) => {
+	return (
+		<div className={styles.container}>
+			<img
+				width="20%"
+				src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/categoriesImages/${image}`}></img>
+			<p>{title}</p>
+		</div>
+	);
+};

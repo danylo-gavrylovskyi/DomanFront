@@ -4,12 +4,19 @@
     position: fixed;
     top: 0;
     bottom: 0;
-    width: 25%;
-    right: 0;
+    width: 70%;
+    left: 0;
     background-color: white;
     transition: all 0.3s ease-in-out;
     z-index: 2;
     font-family: "Inter";
+
+    main{
+        margin: 5px 0;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
 }
 
 .darkBg{
@@ -31,12 +38,12 @@
     align-items: center;
     justify-content: center;
     color: #fff;
-    font-size: 26px;
+    font-size: 18px;
     font-weight: 600;
 }
 
 .close{
-    transform: translateX(100%);
+    transform: translateX(-100%);
 }
 
 .open{
@@ -51,19 +58,4 @@
 .hidden{
     visibility: hidden;
     opacity: 0;
-}
-
-.cartArrow{
-    position: absolute;
-    left: 0;
-    cursor: pointer;
-}
-
-@media (max-width: 900px){
-    .container{
-        width: 50%;
-    }
-    .header{
-        font-size: 20px;
-    }
 }

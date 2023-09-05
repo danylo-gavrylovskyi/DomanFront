@@ -1,22 +1,21 @@
 "use client";
 
 import React from "react";
-import { useSelector } from "react-redux";
 
-import { addAttribute, fetchAttributes } from "@/redux/features/admin/adminAttributesSlice";
-import { RootState, useAppDispatch } from "@/redux/store";
-
-import { Attribute } from "@/types/Attribute";
+import { Attribute } from "@/types/attribute.interface";
 
 import { AdminPageLayout } from "@/components/Admin/AdminPageLayout/AdminPageLayout";
 import { AdminAttribute } from "@/components/Admin/AdminAttribute/AdminAttribute";
 
+import { useAddAttribute, useDeleteAttribute, useGetAttributes } from "@/hooks/attributes.hooks";
+
 const page = () => {
 	const [isAddingAttribute, changeAddingMode] = React.useState<boolean>(false);
-	const dispatch = useAppDispatch();
-	const attributes: Attribute[] = useSelector(
-		(state: RootState) => state.adminAttributes.attributes
-	);
+
+	const { data: attributes } = useGetAttributes();
+
+	const { mutate: addAttribute } = useAddAttribute();
+	const { mutate: deleteAttribute } = useDeleteAttribute();
 
 	const onSaveAttribute = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -24,13 +23,14 @@ const page = () => {
 		const title: string = (
 			(event.target as HTMLFormElement).elements.namedItem("title") as HTMLInputElement
 		).value;
-		dispatch(addAttribute(title));
+
+		addAttribute(title);
 		changeAddingMode((prev) => !prev);
 	};
 
-	React.useEffect(() => {
-		dispatch(fetchAttributes());
-	}, []);
+	if (!attributes) {
+		return <div>Loading...</div>;
+	}
 
 	return (
 		<AdminPageLayout
@@ -43,7 +43,11 @@ const page = () => {
 			createBtnText="Додати атрибут">
 			<>
 				{attributes.map((attribute: Attribute) => (
-					<AdminAttribute key={attribute.id} {...attribute} />
+					<AdminAttribute
+						key={attribute.id}
+						deleteAttribute={deleteAttribute}
+						{...attribute}
+					/>
 				))}
 			</>
 		</AdminPageLayout>

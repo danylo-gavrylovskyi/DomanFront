@@ -2,35 +2,33 @@
 
 import React from "react";
 import { MenuItem, TextField } from "@mui/material";
-import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 
-import { RootState, useAppDispatch } from "@/redux/store";
-import { fetchSubcategories } from "@/redux/features/admin/adminSubcategoriesSlice";
-import { fetchAttributes } from "@/redux/features/admin/adminAttributesSlice";
-import { addProduct } from "@/redux/features/admin/adminProductsSlice";
-
-import { Subcategory } from "@/types/Category";
-import { Attribute } from "@/types/Attribute";
+import { Subcategory } from "@/types/category.interface";
+import { Attribute, AttributeIdValuePair } from "@/types/attribute.interface";
 
 import styles from "./AddProduct.module.scss";
-
-export type AttributeIdValuePair = [categoryId: number, value: string];
+import slugify from "slugify";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useGetSubcategories } from "@/hooks/subcategories.hooks";
+import { useGetAttributes } from "@/hooks/attributes.hooks";
+import { useAddProduct } from "@/hooks/products.hooks";
+import { CreateProductForm } from "@/types/product.interface";
 
 const AddProduct = () => {
 	const { push } = useRouter();
 
+	const { register, handleSubmit } = useForm<CreateProductForm>();
+
 	const [attributeCount, setAttributeCount] = React.useState<number>(1);
 	const [attributeValues, setAttributeValues] = React.useState<AttributeIdValuePair[]>([]);
 
-	const dispatch = useAppDispatch();
-	const subcategories = useSelector((state: RootState) => state.adminSubcategories.subcategories);
-	const attributes = useSelector((state: RootState) => state.adminAttributes.attributes);
+	const [image, setImage] = React.useState<File | null>();
 
-	React.useEffect(() => {
-		dispatch(fetchSubcategories());
-		dispatch(fetchAttributes());
-	}, []);
+	const { data: subcategories } = useGetSubcategories();
+	const { data: attributes } = useGetAttributes();
+
+	const addProduct = useAddProduct();
 
 	const handleAttributeIdChange = (index: number, attributeId: string) => {
 		const updatedAttrValues = [...attributeValues];
@@ -43,48 +41,38 @@ const AddProduct = () => {
 		setAttributeValues(updatedAttrValues);
 	};
 
-	const onSaveProduct = (event: React.FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
-		const eventElements: HTMLFormControlsCollection = (event.target as HTMLFormElement).elements;
-
-		const title: string = (eventElements.namedItem("title") as HTMLInputElement).value;
-		const article: string = (eventElements.namedItem("article") as HTMLInputElement).value;
-		const quantity: string = (eventElements.namedItem("quantity") as HTMLInputElement).value;
-		const subcategoryId: string = (eventElements.namedItem("subcategoryId") as HTMLInputElement)
-			.value;
-		const price: string = (eventElements.namedItem("price") as HTMLInputElement).value;
-
-		const fileInput = (event.target as HTMLFormElement).elements.namedItem(
-			"image"
-		) as HTMLInputElement;
-		const image: File | null = fileInput?.files ? fileInput.files[0] : null;
-
+	const onSaveProduct: SubmitHandler<CreateProductForm> = (values) => {
+		const { article, title, description, quantity, price, subcategoryId } = values;
 		const formData = new FormData();
-		formData.append("title", title);
 		formData.append("article", article);
-		formData.append("quantity", quantity);
-		formData.append("subcategoryId", subcategoryId);
-		formData.append("price", price);
-		if (image === null) {
-			throw new Error("You didnt choose the file");
-		}
-		formData.append("image", image);
+		formData.append("title", title);
+		formData.append("description", description);
+		formData.append("quantity", String(quantity));
+		formData.append("price", String(price));
+		formData.append("subcategoryId", String(subcategoryId));
+		formData.append("slug", slugify(title));
+		image && formData.append("image", image);
 		formData.append("attributeValues", JSON.stringify(attributeValues));
-		dispatch(addProduct(formData));
+		addProduct(formData);
 		push("/admin/products");
 	};
+
+	if (!subcategories || !attributes) {
+		return <div>Loading...</div>;
+	}
 
 	return (
 		<>
 			<header className={styles.heading}>Додавання товару</header>
-			<form onSubmit={onSaveProduct} className={styles.form}>
+			<form onSubmit={handleSubmit(onSaveProduct)} className={styles.form}>
 				<main>
 					<section>
-						<TextField name="title" fullWidth label="Назва" />
-						<TextField name="article" fullWidth label="Артикул" />
+						<TextField {...register("title")} name="title" fullWidth label="Назва" />
+						<TextField {...register("article")} name="article" fullWidth label="Артикул" />
 					</section>
 					<section>
 						<TextField
+							{...register("subcategoryId")}
 							name="subcategoryId"
 							className={styles.select}
 							label="Підкатегорія"
@@ -95,12 +83,28 @@ const AddProduct = () => {
 								</MenuItem>
 							))}
 						</TextField>
-						<TextField name="quantity" type="number" label="Кількість" />
-						<TextField name="price" type="number" label="Ціна" />
+						<TextField
+							{...register("quantity")}
+							name="quantity"
+							type="number"
+							label="Кількість"
+						/>
+						<TextField {...register("price")} name="price" type="number" label="Ціна" />
 						<label className={styles.loadImg}>
 							Обкладинка
-							<input name="image" type="file"></input>
+							<input
+								onChange={(e) => setImage(e.target.files ? e.target.files[0] : null)}
+								name="image"
+								type="file"></input>
 						</label>
+					</section>
+					<section>
+						<TextField
+							{...register("description")}
+							name="description"
+							fullWidth
+							label="Опис"
+						/>
 					</section>
 					{[...Array(attributeCount)].map((el, index: number) => (
 						<section key={index}>

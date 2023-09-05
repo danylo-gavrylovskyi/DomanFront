@@ -29,7 +29,12 @@ export const HamburgerMenu = () => {
 				</header>
 				<main>
 					{categories.map((category) => (
-						<CategoryCard id={category.id} title={category.title} image={category.image} />
+						<CategoryCard
+							key={category.id}
+							id={category.id}
+							title={category.title}
+							image={category.image}
+						/>
 					))}
 				</main>
 			</div>

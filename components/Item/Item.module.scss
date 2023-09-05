@@ -19,13 +19,16 @@
 }
 
 .title{
+    a{
+        color: black;
+        &:hover{
+            color: $contrast-color;
+        }
+    }
     font-size: 18px;
     font-weight: 600px;
     margin: 0 20px;
     transition: color .2s;
-    &:hover{
-        color: $contrast-color;
-    }
     cursor: pointer;
 }
 

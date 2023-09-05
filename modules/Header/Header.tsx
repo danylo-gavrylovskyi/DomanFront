@@ -1,30 +1,51 @@
 "use client";
 
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import Link from "next/link";
 import { Paper } from "@mui/material";
 
 import { changeCartStatus } from "../../redux/features/cartSlice";
 import { setIsCategClicked } from "@/redux/features/homeSlice";
 import { setIsSearchOpened, toggleHamburgerMenu } from "@/redux/features/headerSlice";
-import { RootState } from "@/redux/store";
+import { RootState, useAppDispatch } from "@/redux/store";
+import { fetchProducts } from "@/redux/features/admin/adminProductsSlice";
 
-import { Category } from "@/types/Category";
+import { Category } from "@/types/category.interface";
 
+import { FindedProducts } from "./FindedProducts/FindedProducts";
 import { MobileSearch } from "../MobileSearch/MobileSearch";
 import { DropdownCategory } from "@/components/DropdownCategory/DropdownCategory";
 
 import styles from "./Header.module.scss";
+import { fetchCategories } from "@/redux/features/admin/adminCategoriesSlice";
+import { Auth } from "../Auth/Auth";
+import { useRouter } from "next/navigation";
 
 export const Header = () => {
+	const dispatch = useAppDispatch();
+
+	const [inputValue, setInputValue] = React.useState<string>("");
+	const [isAuthClicked, toggleAuth] = React.useState<boolean>(false);
+
+	const findedProducts = useSelector((state: RootState) => state.adminProducts.products)
+		.filter((product) => product.title.toLowerCase().includes(inputValue.toLowerCase()))
+		.slice(0, 4);
+
 	const isCategoriesClicked: boolean = useSelector(
 		(state: RootState) => state.home.isCategoriesClicked
 	);
-	const dispatch = useDispatch();
 	const categories: Category[] = useSelector(
 		(state: RootState) => state.adminCategories.categories
 	);
+	const currentUser = useSelector((state: RootState) => state.auth.currentUser);
+
+	const { push } = useRouter();
+
+	useEffect(() => {
+		dispatch(fetchProducts());
+	}, []);
+
 	return (
 		<header className={styles.header}>
 			<MobileSearch />
@@ -71,7 +92,9 @@ export const Header = () => {
 					</Paper>
 				</section>
 				<div className={styles.search}>
-					<input placeholder="Я шукаю..."></input>
+					<input
+						onChange={(e) => setInputValue(e.target.value)}
+						placeholder="Я шукаю..."></input>
 					<svg
 						fill="rgb(34, 34, 34);"
 						width="20px"
@@ -87,6 +110,9 @@ export const Header = () => {
 						</g>
 					</svg>
 				</div>
+
+				{inputValue && <FindedProducts products={findedProducts} />}
+
 				<section className={`${styles.centerFlex} ${styles.userBtns}`}>
 					<svg
 						onClick={() => dispatch(setIsSearchOpened())}
@@ -104,7 +130,11 @@ export const Header = () => {
 							strokeLinejoin="round"
 						/>
 					</svg>
-					<span className={styles.profileBtn}>
+					<span
+						onClick={() =>
+							currentUser ? push("/profile/orders") : toggleAuth((prev) => !prev)
+						}
+						className={styles.profileBtn}>
 						<svg
 							className={styles.profileSvg}
 							fill="#fff"
@@ -120,6 +150,9 @@ export const Header = () => {
 						</svg>
 						<span className={styles.iconText}>Ваш профіль</span>
 					</span>
+
+					{isAuthClicked && <Auth toggleAuth={toggleAuth} />}
+
 					<span onClick={() => dispatch(changeCartStatus())} className={styles.centerFlex}>
 						<svg
 							className={styles.cartSvg}

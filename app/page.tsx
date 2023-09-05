@@ -1,6 +1,7 @@
-import { AutoplaySlider } from "../components/AutoplaySlider/AutoplaySlider";
+import React from "react";
+
+import { AutoplaySlider } from "../modules/AutoplaySlider/AutoplaySlider";
 import { Categories } from "../modules/Categories/Categories";
-import { Footer } from "../modules/Footer/Footer";
 import { PopularItems } from "../modules/PopularItems/PopularItems";
 
 import styles from "./page.module.scss";
@@ -12,7 +13,6 @@ export default function Home() {
 				<AutoplaySlider />
 				<PopularItems />
 				<Categories />
-				<Footer />
 			</div>
 		</div>
 	);

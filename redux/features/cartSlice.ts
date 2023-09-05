@@ -1,7 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+import { CartProduct, Product } from "@/types/product.interface";
+
+interface CartSliceState {
+	isOpened: boolean;
+	cartProducts: CartProduct[];
+}
+
+const initialState: CartSliceState = {
 	isOpened: false,
+	cartProducts: [],
 };
 
 export const cartSlice = createSlice({
@@ -11,8 +19,35 @@ export const cartSlice = createSlice({
 		changeCartStatus: (state) => {
 			state.isOpened = !state.isOpened;
 		},
+		addToCart: (state, action: PayloadAction<Product>) => {
+			const findedProduct = state.cartProducts.find(
+				(obj) => obj.product.id === action.payload.id
+			);
+			if (findedProduct) {
+				findedProduct.quantity++;
+			} else {
+				state.cartProducts.push({ product: action.payload, quantity: 1 });
+			}
+		},
+		removeOneUnit: (state, action: PayloadAction<number>) => {
+			const findedProduct = state.cartProducts.find((obj) => obj.product.id === action.payload);
+			if (findedProduct) {
+				findedProduct.quantity === 1
+					? (state.cartProducts = state.cartProducts.filter(
+							(obj) => obj.product.id !== action.payload
+					  ))
+					: findedProduct.quantity--;
+			}
+		},
+		removeFromCart: (state, action: PayloadAction<number>) => {
+			state.cartProducts = state.cartProducts.filter((obj) => obj.product.id !== action.payload);
+		},
+		clearCart: (state) => {
+			state.cartProducts = [];
+		},
 	},
 });
 
-export const { changeCartStatus } = cartSlice.actions;
+export const { changeCartStatus, addToCart, removeFromCart, removeOneUnit, clearCart } =
+	cartSlice.actions;
 export default cartSlice.reducer;

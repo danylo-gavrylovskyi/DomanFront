@@ -1,14 +1,13 @@
 import React from "react";
 import { Button, Paper } from "@mui/material";
+import Link from "next/link";
 
-import { deleteProduct } from "@/redux/features/admin/adminProductsSlice";
-import { RootState, useAppDispatch } from "@/redux/store";
+import { useDeleteProduct } from "@/hooks/products.hooks";
+import { useGetSubcategories } from "@/hooks/subcategories.hooks";
 
-import { Product } from "@/types/Product";
+import { Product } from "@/types/product.interface";
 
 import styles from "./AdminCategory/AdminCategory.module.scss";
-import { useSelector } from "react-redux";
-import Link from "next/link";
 
 export const AdminProduct = ({
 	id,
@@ -19,10 +18,12 @@ export const AdminProduct = ({
 	article,
 	subcategoryId,
 }: Product) => {
-	const dispatch = useAppDispatch();
-	const subcategory = useSelector((state: RootState) =>
-		state.adminSubcategories.subcategories.find((subcategory) => subcategory.id === subcategoryId)
+	const subcategory = useGetSubcategories().data?.find(
+		(subcategory) => subcategory.id === subcategoryId
 	);
+
+	const deleteProduct = useDeleteProduct();
+
 	return (
 		<Paper elevation={3} className={styles.container}>
 			<img
@@ -39,7 +40,7 @@ export const AdminProduct = ({
 			<Link href={`/admin/products/${id}`}>
 				<Button variant="contained">Змінити</Button>
 			</Link>
-			<Button onClick={() => dispatch(deleteProduct(id))} variant="contained" color="error">
+			<Button onClick={() => deleteProduct(id)} variant="contained" color="error">
 				Видалити
 			</Button>
 		</Paper>

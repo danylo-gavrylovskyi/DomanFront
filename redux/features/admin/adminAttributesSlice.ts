@@ -1,6 +1,6 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "@/utils/axios";
-import { Attribute } from "@/types/Attribute";
+import { Attribute } from "@/types/attribute.interface";
 
 export const fetchAttributes = createAsyncThunk("admin/fetchingAttributes", async () => {
 	const { data } = await axios.get("/attributes");

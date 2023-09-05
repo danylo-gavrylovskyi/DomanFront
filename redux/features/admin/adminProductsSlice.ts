@@ -1,8 +1,8 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "@/utils/axios";
 
-import { Product } from "@/types/Product";
-import { CreateProductAttribute, ProductAttribute } from "@/types/ProductAttributes";
+import { Product } from "@/types/product.interface";
+import { CreateProductAttribute, ProductAttribute } from "@/types/product-attributes.interface";
 
 export const fetchProducts = createAsyncThunk("admin/fetchingProducts", async () => {
 	const { data } = await axios.get("/products");

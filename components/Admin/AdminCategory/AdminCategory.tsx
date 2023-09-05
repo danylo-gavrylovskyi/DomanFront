@@ -1,33 +1,24 @@
 import React from "react";
 import { Button, Paper } from "@mui/material";
+import { UseMutateFunction } from "@tanstack/react-query";
 
-import { useAppDispatch } from "@/redux/store";
-
-import { Category, Subcategory } from "@/types/Category";
+import { Category } from "@/types/category.interface";
 
 import styles from "./AdminCategory.module.scss";
-import { AsyncThunk } from "@reduxjs/toolkit";
 
 interface AdminCategoryProps extends Category {
+	imageFolder?: string;
 	subcategoryParent?: Category;
-	edit:
-		| AsyncThunk<
-				Category,
-				{
-					id: number;
-					formData: FormData;
-				},
-				any
-		  >
-		| AsyncThunk<
-				Subcategory,
-				{
-					id: number;
-					formData: FormData;
-				},
-				any
-		  >;
-	deleteItem: AsyncThunk<number, number, any>;
+	edit: UseMutateFunction<
+		Category,
+		unknown,
+		{
+			categoryId: number;
+			formData: FormData;
+		},
+		unknown
+	>;
+	deleteItem: UseMutateFunction<number, unknown, number, unknown>;
 }
 
 export const AdminCategory = ({
@@ -36,9 +27,9 @@ export const AdminCategory = ({
 	image,
 	edit,
 	deleteItem,
+	imageFolder = "categoriesImages",
 	subcategoryParent,
 }: AdminCategoryProps) => {
-	const dispatch = useAppDispatch();
 	const [isEditing, changeEditingMode] = React.useState<boolean>(false);
 
 	const onSaveEditCategory = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -59,7 +50,8 @@ export const AdminCategory = ({
 		if (image) {
 			formData.append("image", image);
 		}
-		dispatch(edit({ id, formData }));
+
+		edit({ categoryId: id, formData });
 		changeEditingMode((prev) => !prev);
 	};
 
@@ -68,7 +60,9 @@ export const AdminCategory = ({
 			<img
 				style={isEditing ? { display: "none" } : { display: "block" }}
 				width={"8%"}
-				src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/categoriesImages/${image}`}></img>
+				src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/${
+					subcategoryParent ? "subcategoriesImages" : "categoriesImages"
+				}/${image}`}></img>
 
 			<form
 				style={isEditing ? { display: "flex" } : {}}
@@ -99,7 +93,7 @@ export const AdminCategory = ({
 				variant="contained">
 				Змінити
 			</Button>
-			<Button onClick={() => dispatch(deleteItem(id))} variant="contained" color="error">
+			<Button onClick={() => deleteItem(id)} variant="contained" color="error">
 				Видалити
 			</Button>
 		</Paper>

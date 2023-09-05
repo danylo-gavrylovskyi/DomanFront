@@ -1,7 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "@/utils/axios";
 
-import { Category, Subcategory } from "@/types/Category";
+import { Category, Subcategory } from "@/types/category.interface";
 
 export const fetchSubcategories = createAsyncThunk("admin/fetchingSubcategories", async () => {
 	const { data } = await axios.get("/subcategories");

@@ -1,27 +1,27 @@
 "use client";
 
 import React from "react";
-import { useSelector } from "react-redux";
 
-import { RootState, useAppDispatch } from "@/redux/store";
 import {
-	addCategory,
-	deleteCategory,
-	editCategory,
-	fetchCategories,
-} from "@/redux/features/admin/adminCategoriesSlice";
+	useAddCategory,
+	useDeleteCategory,
+	useEditCategory,
+	useGetCategories,
+} from "@/hooks/categories.hooks";
 
-import { Category } from "@/types/Category";
+import { Category } from "@/types/category.interface";
 
 import { AdminCategory } from "@/components/Admin/AdminCategory/AdminCategory";
 import { AdminPageLayout } from "@/components/Admin/AdminPageLayout/AdminPageLayout";
 
 const Categories = () => {
 	const [isAddingCategory, changeAddingMode] = React.useState<boolean>(false);
-	const dispatch = useAppDispatch();
-	const categories: Category[] = useSelector(
-		(state: RootState) => state.adminCategories.categories
-	);
+
+	const { data: categories, isLoading, isError } = useGetCategories();
+
+	const { mutate: addCategory } = useAddCategory();
+	const { mutate: editCategory } = useEditCategory();
+	const { mutate: deleteCategory } = useDeleteCategory();
 
 	const onSaveCategory = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -43,13 +43,13 @@ const Categories = () => {
 		}
 		formData.append("image", image);
 
-		dispatch(addCategory(formData));
+		addCategory(formData);
 		changeAddingMode((prev) => !prev);
 	};
 
-	React.useEffect(() => {
-		dispatch(fetchCategories());
-	}, []);
+	if (isLoading || isError) {
+		return <div>Loading...</div>;
+	}
 
 	return (
 		<AdminPageLayout

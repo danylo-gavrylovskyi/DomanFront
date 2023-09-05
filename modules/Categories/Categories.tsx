@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { RootState, useAppDispatch } from "@/redux/store";
 import { fetchCategories } from "@/redux/features/admin/adminCategoriesSlice";
 
-import { Category } from "@/types/Category";
+import { Category } from "@/types/category.interface";
 
 import { CategoryCard } from "../../components/CategoryCard/CategoryCard";
 

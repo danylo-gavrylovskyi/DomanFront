@@ -1,21 +1,4 @@
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-
-import axios from "@/utils/axios";
-
-export const fetchBanners = createAsyncThunk("admin/fetchingBanners", async () => {
-	const { data } = await axios.get("/banners");
-	return data as string[];
-});
-
-export const addBanner = createAsyncThunk("admin/addingBanner", async (banner: FormData) => {
-	const { data } = await axios.post("/banners", banner);
-	return data as string;
-});
-
-export const deleteBanner = createAsyncThunk("admin/deletingBanner", async (bannerUrl: string) => {
-	const { data } = await axios.delete(`/banners/${bannerUrl}`);
-	return data as string;
-});
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
 	activeCategoryIndex:
@@ -49,17 +32,6 @@ const adminGeneralSlice = createSlice({
 		setCurrentBanner: (state, action: PayloadAction<number>) => {
 			state.currentBanner = action.payload;
 		},
-	},
-	extraReducers: (builder) => {
-		builder.addCase(fetchBanners.fulfilled, (state, action: PayloadAction<string[]>) => {
-			state.banners = action.payload;
-		});
-		builder.addCase(addBanner.fulfilled, (state, action: PayloadAction<string>) => {
-			state.banners = [...state.banners, action.payload];
-		});
-		builder.addCase(deleteBanner.fulfilled, (state, action: PayloadAction<string>) => {
-			state.banners = state.banners.filter((banner) => banner !== action.payload);
-		});
 	},
 });
 

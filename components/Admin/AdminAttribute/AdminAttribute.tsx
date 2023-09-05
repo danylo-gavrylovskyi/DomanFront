@@ -1,19 +1,20 @@
 import React from "react";
 import { Button, Paper } from "@mui/material";
+import { UseMutateFunction } from "@tanstack/react-query";
 
-import { useAppDispatch } from "@/redux/store";
-import { deleteAttribute } from "@/redux/features/admin/adminAttributesSlice";
-
-import { Attribute } from "@/types/Attribute";
+import { Attribute } from "@/types/attribute.interface";
 
 import styles from "./AdminAttribute.module.scss";
 
-export const AdminAttribute = ({ id, title }: Attribute) => {
-	const dispatch = useAppDispatch();
+interface AdminAttributeProps extends Attribute {
+	deleteAttribute: UseMutateFunction<number, unknown, number, unknown>;
+}
+
+export const AdminAttribute = ({ id, title, deleteAttribute }: AdminAttributeProps) => {
 	return (
 		<Paper elevation={3} className={styles.container}>
 			<p>{title}</p>
-			<Button onClick={() => dispatch(deleteAttribute(id))} variant="contained" color="error">
+			<Button onClick={() => deleteAttribute(id)} variant="contained" color="error">
 				Видалити
 			</Button>
 		</Paper>

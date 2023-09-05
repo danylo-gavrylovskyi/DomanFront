@@ -9,15 +9,13 @@ import { RootState } from "@/redux/store";
 import { setActiveCategory } from "@/redux/features/admin/adminGeneralSlice";
 
 import styles from "./AdminLayout.module.scss";
+import { usePathname } from "next/navigation";
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
 	const activeCategoryIndex = useSelector(
 		(state: RootState) => state.adminGeneral.activeCategoryIndex
 	);
 	const dispatch = useDispatch();
-	React.useEffect(() => {
-		sessionStorage.setItem("activeTab", "0");
-	}, []);
 
 	const sections = [
 		{ href: "products", name: "Товари" },
@@ -26,6 +24,8 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
 		{ href: "banners", name: "Банери" },
 		{ href: "attributes", name: "Атрибути" },
 	];
+
+	const pathname = usePathname().split("/");
 
 	return (
 		<>
@@ -42,7 +42,9 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
 								onClick={() => {
 									dispatch(setActiveCategory(index));
 								}}
-								className={activeCategoryIndex === index ? styles.active : ""}>
+								className={
+									pathname[pathname.length - 1] === section.href ? styles.active : ""
+								}>
 								{section.name}
 							</section>
 						</Link>

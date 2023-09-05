@@ -1,11 +1,12 @@
 "use client";
 
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import { RootState, useAppDispatch } from "@/redux/store";
+import { useGetBanners } from "@/hooks/banners.hooks";
+
+import { RootState } from "@/redux/store";
 import {
-	fetchBanners,
 	nextBanner,
 	previousBanner,
 	setCurrentBanner,
@@ -14,17 +15,22 @@ import {
 import styles from "./AutoplaySlider.module.scss";
 
 export const AutoplaySlider = () => {
-	const dispatch = useAppDispatch();
+	const dispatch = useDispatch();
+
+	const { data: banners, isError, isLoading } = useGetBanners();
 
 	React.useEffect(() => {
-		dispatch(fetchBanners());
 		const autoplaySlider = setInterval(() => dispatch(nextBanner()), 6000);
 		return () => clearInterval(autoplaySlider);
 	}, []);
+
 	const currentBanner: number = useSelector(
 		(state: RootState) => state.adminGeneral.currentBanner
 	);
-	const banners: string[] = useSelector((state: RootState) => state.adminGeneral.banners);
+
+	if (isLoading || isError) {
+		return <div>Loading...</div>;
+	}
 
 	return (
 		<div className={styles.sliderImgContainer}>

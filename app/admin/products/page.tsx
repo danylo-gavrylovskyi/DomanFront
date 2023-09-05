@@ -1,22 +1,23 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
+
+import { useGetProducts } from "@/hooks/products.hooks";
+
+import { AdminProduct } from "@/components/Admin/AdminProduct";
+
+import { Product } from "@/types/product.interface";
 
 import styles from "./AdminProducts.module.scss";
-import Link from "next/link";
-import { Product } from "@/types/Product";
-import { AdminProduct } from "@/components/Admin/AdminProduct";
-import { useSelector } from "react-redux";
-import { RootState, useAppDispatch } from "@/redux/store";
-import { fetchProducts } from "@/redux/features/admin/adminProductsSlice";
 
 const AdminProducts = () => {
-	const dispatch = useAppDispatch();
-	const products = useSelector((state: RootState) => state.adminProducts.products);
+	const { data: products, isLoading, isError } = useGetProducts();
 
-	React.useEffect(() => {
-		dispatch(fetchProducts());
-	}, []);
+	if (isLoading || isError) {
+		return <div>Loading...</div>;
+	}
+
 	return (
 		<>
 			<header className={styles.header}>

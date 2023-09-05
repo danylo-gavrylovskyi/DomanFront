@@ -2,41 +2,32 @@
 
 import React from "react";
 import { MenuItem, TextField } from "@mui/material";
-import { useSelector } from "react-redux";
 import { useRouter, useParams } from "next/navigation";
+import { SubmitHandler, useForm } from "react-hook-form";
 
-import { RootState, useAppDispatch } from "@/redux/store";
-import { fetchSubcategories } from "@/redux/features/admin/adminSubcategoriesSlice";
-import { fetchAttributes } from "@/redux/features/admin/adminAttributesSlice";
-import { editProduct, fetchProducts } from "@/redux/features/admin/adminProductsSlice";
+import { useEditProduct, useGetProducts } from "@/hooks/products.hooks";
+import { useGetAttributes } from "@/hooks/attributes.hooks";
+import { useGetSubcategories } from "@/hooks/subcategories.hooks";
 
-import { Subcategory } from "@/types/Category";
-import { Attribute, ReceivedAttribute } from "@/types/Attribute";
+import { Subcategory } from "@/types/category.interface";
+import { Attribute, AttributeIdValuePair } from "@/types/attribute.interface";
+import { Product } from "@/types/product.interface";
+import { UpdateProduct } from "@/types/update-product.interface";
 
 import styles from "../new/AddProduct.module.scss";
-import { AttributeIdValuePair } from "../new/page";
-import { Product } from "@/types/Product";
 
 const UpdateProduct = () => {
 	const { push } = useRouter();
 	const { id } = useParams();
 
-	React.useEffect(() => {
-		dispatch(fetchProducts());
-		dispatch(fetchSubcategories());
-		dispatch(fetchAttributes());
-	}, []);
+	const { register, handleSubmit } =
+		useForm<Omit<UpdateProduct, "newAttributeValues" | "oldAttributeValues">>();
 
-	const dispatch = useAppDispatch();
-	const product: Product | undefined = useSelector((state: RootState) =>
-		state.adminProducts.products.find((product: Product) => product.id === Number(id))
-	);
-	const subcategories: Subcategory[] = useSelector(
-		(state: RootState) => state.adminSubcategories.subcategories
-	);
-	const attributes: Attribute[] = useSelector(
-		(state: RootState) => state.adminAttributes.attributes
-	);
+	const product = useGetProducts().data?.find((product: Product) => product.id === Number(id));
+	const { data: subcategories } = useGetSubcategories();
+	const { data: attributes } = useGetAttributes();
+
+	const editProduct = useEditProduct();
 
 	const [attributeCount, setAttributeCount] = React.useState<number>(0);
 	const [newAttributeValues, setNewAttributeValues] = React.useState<AttributeIdValuePair[]>([]);
@@ -57,7 +48,7 @@ const UpdateProduct = () => {
 		setOldAttributeValues((prev) => [...prev, [attributeId, attributeValue]]);
 	};
 
-	if (!product) {
+	if (!product || !attributes || !subcategories) {
 		return <div>Loading...</div>;
 	}
 
@@ -65,54 +56,71 @@ const UpdateProduct = () => {
 		return attributes.find((attribute) => attribute.id === id);
 	};
 
-	const onSaveProduct = (event: React.FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
-		const eventElements: HTMLFormControlsCollection = (event.target as HTMLFormElement).elements;
-
-		const title: string = (eventElements.namedItem("title") as HTMLInputElement).value;
-		const article: string = (eventElements.namedItem("article") as HTMLInputElement).value;
-		const quantity: string = (eventElements.namedItem("quantity") as HTMLInputElement).value;
-		const subcategoryId: string = (eventElements.namedItem("subcategoryId") as HTMLInputElement)
-			.value;
-		const price: string = (eventElements.namedItem("price") as HTMLInputElement).value;
-
-		const fileInput = (event.target as HTMLFormElement).elements.namedItem(
-			"image"
-		) as HTMLInputElement;
-		const image: File | null = fileInput?.files ? fileInput.files[0] : null;
-
-		const formData = new FormData();
-		if (title !== product.title) formData.append("title", title);
-
-		if (article !== product.article) formData.append("article", article);
-
-		if (Number(quantity) !== product.quantity) formData.append("quantity", quantity);
-
-		if (Number(subcategoryId) !== product.subcategoryId)
-			formData.append("subcategoryId", subcategoryId);
-
-		if (+price !== +product.price) formData.append("price", price);
-
-		if (image) formData.append("image", image);
-
-		if (oldAttributeValues.length > 0)
-			formData.append("oldAttributeValues", JSON.stringify(oldAttributeValues));
-
-		if (newAttributeValues.length > 0)
-			formData.append("newAttributeValues", JSON.stringify(newAttributeValues));
-
-		dispatch(editProduct({ id: Number(id), formData }));
+	const onSaveProduct: SubmitHandler<
+		Omit<UpdateProduct, "newAttributeValues" | "oldAttributeValues">
+	> = (values) => {
+		editProduct({
+			productId: product.id,
+			editData: { ...values, newAttributeValues, oldAttributeValues },
+		});
 		push("/admin/products");
 	};
+
+	// const onSaveProduct = (event: React.FormEvent<HTMLFormElement>) => {
+	// 	event.preventDefault();
+	// 	const eventElements: HTMLFormControlsCollection = (event.target as HTMLFormElement).elements;
+
+	// 	const title: string = (eventElements.namedItem("title") as HTMLInputElement).value;
+	// 	const article: string = (eventElements.namedItem("article") as HTMLInputElement).value;
+	// 	const quantity: string = (eventElements.namedItem("quantity") as HTMLInputElement).value;
+	// 	const subcategoryId: string = (eventElements.namedItem("subcategoryId") as HTMLInputElement)
+	// 		.value;
+	// 	const price: string = (eventElements.namedItem("price") as HTMLInputElement).value;
+
+	// 	const fileInput = (event.target as HTMLFormElement).elements.namedItem(
+	// 		"image"
+	// 	) as HTMLInputElement;
+	// 	const image: File | null = fileInput?.files ? fileInput.files[0] : null;
+
+	// 	const formData = new FormData();
+	// 	if (title !== product.title) formData.append("title", title);
+
+	// 	if (article !== product.article) formData.append("article", article);
+
+	// 	if (Number(quantity) !== product.quantity) formData.append("quantity", quantity);
+
+	// 	if (Number(subcategoryId) !== product.subcategoryId)
+	// 		formData.append("subcategoryId", subcategoryId);
+
+	// 	if (+price !== +product.price) formData.append("price", price);
+
+	// 	if (image) formData.append("image", image);
+
+	// 	if (oldAttributeValues.length > 0)
+	// 		formData.append("oldAttributeValues", JSON.stringify(oldAttributeValues));
+
+	// 	if (newAttributeValues.length > 0)
+	// 		formData.append("newAttributeValues", JSON.stringify(newAttributeValues));
+
+	// 	editProduct({ productId: Number(id), formData });
+	// 	push("/admin/products");
+	// };
 
 	return (
 		<>
 			<header className={styles.heading}>Редагування товару</header>
-			<form onSubmit={onSaveProduct} className={styles.form}>
+			<form onSubmit={handleSubmit(onSaveProduct)} className={styles.form}>
 				<main>
 					<section>
-						<TextField defaultValue={product.title} name="title" fullWidth label="Назва" />
 						<TextField
+							{...register("title")}
+							defaultValue={product.title}
+							name="title"
+							fullWidth
+							label="Назва"
+						/>
+						<TextField
+							{...register("article")}
 							defaultValue={product?.article}
 							name="article"
 							fullWidth
@@ -121,6 +129,7 @@ const UpdateProduct = () => {
 					</section>
 					<section>
 						<TextField
+							{...register("subcategoryId")}
 							defaultValue={product.subcategoryId}
 							name="subcategoryId"
 							className={styles.select}
@@ -133,19 +142,36 @@ const UpdateProduct = () => {
 							))}
 						</TextField>
 						<TextField
+							{...register("quantity")}
 							defaultValue={product.quantity}
 							name="quantity"
 							type="number"
 							label="Кількість"
 						/>
-						<TextField defaultValue={product.price} name="price" type="number" label="Ціна" />
+						<TextField
+							{...register("price")}
+							defaultValue={product.price}
+							name="price"
+							type="number"
+							label="Ціна"
+						/>
 						<label className={styles.loadImg}>
 							Обкладинка
-							<input name="image" type="file"></input>
+							<input {...register("image")} name="image" type="file"></input>
 						</label>
 					</section>
-					{product.attributes?.map((attribute: ReceivedAttribute) => (
-						<section>
+					<section>
+						<TextField
+							{...register("description")}
+							defaultValue={product.description}
+							name="description"
+							fullWidth
+							label="Опис"
+						/>
+					</section>
+
+					{product.attributes?.map((attribute: Attribute) => (
+						<section key={attribute.id}>
 							<TextField
 								label="Атрибут"
 								defaultValue={getAttributeById(attribute.attributeId)?.title}
@@ -165,6 +191,7 @@ const UpdateProduct = () => {
 							/>
 						</section>
 					))}
+
 					{[...Array(attributeCount)].map((el, index: number) => (
 						<section key={index}>
 							<TextField

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Category } from "@/types/Category";
+import { Category } from "@/types/category.interface";
 
 import { MenuItem, TextField } from "@mui/material";
 

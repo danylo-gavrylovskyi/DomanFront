@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 
 import { RootState, useAppDispatch } from "@/redux/store";
 
-import { Category, Subcategory } from "@/types/Category";
+import { Category, Subcategory } from "@/types/category.interface";
 
 import { AdminCategory } from "@/components/Admin/AdminCategory/AdminCategory";
 import { AdminPageLayout } from "@/components/Admin/AdminPageLayout/AdminPageLayout";
@@ -76,6 +76,7 @@ const Subcategories = () => {
 						key={subcategory.id}
 						edit={editSubcategory}
 						deleteItem={deleteSubcategory}
+						imageFolder="subcategoriesImages"
 						subcategoryParent={categories.find(
 							(category) => category.id === subcategory.categoryId
 						)}

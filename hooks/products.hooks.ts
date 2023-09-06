@@ -10,9 +10,7 @@ import {
 	EDIT_PRODUCT_KEY,
 	GET_PRODUCTS_KEY,
 } from "@/types/constants/react-query-keys.constants";
-import { Update } from "@reduxjs/toolkit";
 import { UpdateProduct } from "@/types/update-product.interface";
-import { CreateProduct } from "@/types/product.interface";
 
 export const useGetProducts = () => {
 	return useQuery([GET_PRODUCTS_KEY], () => ProductsService.getAll());
@@ -34,8 +32,8 @@ export const useAddProduct = () => {
 export const useEditProduct = () => {
 	const { mutate } = useMutation(
 		[EDIT_PRODUCT_KEY],
-		({ productId, editData }: { productId: number; editData: UpdateProduct }) =>
-			ProductsService.edit(productId, editData),
+		({ productId, formData }: { productId: number; formData: FormData }) =>
+			ProductsService.edit(productId, formData),
 		{
 			onSuccess() {
 				queryClient.invalidateQueries({ queryKey: [GET_PRODUCTS_KEY] });

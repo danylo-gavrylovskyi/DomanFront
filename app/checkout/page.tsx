@@ -59,8 +59,6 @@ const page = () => {
 			orderedProducts: cartProducts,
 		};
 
-		console.log(data);
-
 		await OrdersService.placeOrder(data);
 		dispatch(clearCart());
 	};

@@ -4,16 +4,25 @@ import { AutoplaySlider } from "../modules/AutoplaySlider/AutoplaySlider";
 import { Categories } from "../modules/Categories/Categories";
 import { PopularItems } from "../modules/PopularItems/PopularItems";
 
-import styles from "./page.module.scss";
+import { CategoriesService } from "@/services/categories.service";
+import { ProductsService } from "@/services/products.service";
 
-export default function Home() {
+import styles from "./page.module.scss";
+import { BannersService } from "@/services/banners.service";
+
+const Home = async () => {
+	const categories = await CategoriesService.getAll();
+	const banners = await BannersService.getAll();
+
 	return (
 		<div>
 			<div className={styles.container}>
-				<AutoplaySlider />
+				<AutoplaySlider banners={banners} />
 				<PopularItems />
-				<Categories />
+				<Categories categories={categories} />
 			</div>
 		</div>
 	);
-}
+};
+
+export default Home;

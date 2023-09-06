@@ -3,8 +3,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { useGetBanners } from "@/hooks/banners.hooks";
-
 import { RootState } from "@/redux/store";
 import {
 	nextBanner,
@@ -14,23 +12,17 @@ import {
 
 import styles from "./AutoplaySlider.module.scss";
 
-export const AutoplaySlider = () => {
+export const AutoplaySlider = ({ banners }: { banners: string[] }) => {
 	const dispatch = useDispatch();
 
-	const { data: banners, isError, isLoading } = useGetBanners();
-
 	React.useEffect(() => {
-		const autoplaySlider = setInterval(() => dispatch(nextBanner()), 6000);
+		const autoplaySlider = setInterval(() => dispatch(nextBanner(banners.length)), 6000);
 		return () => clearInterval(autoplaySlider);
 	}, []);
 
 	const currentBanner: number = useSelector(
 		(state: RootState) => state.adminGeneral.currentBanner
 	);
-
-	if (isLoading || isError) {
-		return <div>Loading...</div>;
-	}
 
 	return (
 		<div className={styles.sliderImgContainer}>
@@ -59,7 +51,7 @@ export const AutoplaySlider = () => {
 				/>
 			</svg>
 			<svg
-				onClick={() => dispatch(nextBanner())}
+				onClick={() => dispatch(nextBanner(banners.length))}
 				className={styles.rightArrow}
 				xmlns="http://www.w3.org/2000/svg"
 				width="5%"

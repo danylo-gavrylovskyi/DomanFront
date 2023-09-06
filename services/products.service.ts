@@ -20,8 +20,8 @@ export const ProductsService = {
 		return data;
 	},
 
-	async edit(productId: number, editData: UpdateProduct): Promise<Product> {
-		const { data } = await customAxios.patch(`${ApiRoutes.Products}/${productId}`, editData);
+	async edit(productId: number, formData: FormData): Promise<Product> {
+		const { data } = await customAxios.patch(`${ApiRoutes.Products}/${productId}`, formData);
 		return data;
 	},
 };

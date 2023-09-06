@@ -1,10 +1,4 @@
-"use client";
-
 import React from "react";
-import { useSelector } from "react-redux";
-
-import { RootState, useAppDispatch } from "@/redux/store";
-import { fetchCategories } from "@/redux/features/admin/adminCategoriesSlice";
 
 import { Category } from "@/types/category.interface";
 
@@ -12,15 +6,11 @@ import { CategoryCard } from "../../components/CategoryCard/CategoryCard";
 
 import styles from "./Categories.module.scss";
 
-export const Categories = () => {
-	const dispatch = useAppDispatch();
-	React.useEffect(() => {
-		dispatch(fetchCategories());
-	}, []);
+export const Categories = ({ categories }: { categories: Category[] }) => {
+	if (!categories) {
+		return <div>Loading...</div>;
+	}
 
-	const categories: Category[] = useSelector(
-		(state: RootState) => state.adminCategories.categories
-	);
 	return (
 		<div className={styles.container}>
 			<p>Категорії товарів</p>

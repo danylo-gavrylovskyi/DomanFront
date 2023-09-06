@@ -2,28 +2,20 @@
 
 import React from "react";
 import { Paper } from "@mui/material";
-import slugify from "slugify";
-
 import { useParams } from "next/navigation";
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
-import { RootState, useAppDispatch } from "@/redux/store";
-import { fetchProducts } from "@/redux/features/admin/adminProductsSlice";
 import { addToCart } from "@/redux/features/cartSlice";
+
+import { useGetProducts } from "@/hooks/products.hooks";
 
 import styles from "./ProductPage.module.scss";
 
 const ProductPage = () => {
-	const dispatch = useAppDispatch();
-
-	React.useEffect(() => {
-		dispatch(fetchProducts());
-	}, []);
+	const dispatch = useDispatch();
 
 	let productSlug: string = useParams().product as string;
-	const product = useSelector((state: RootState) => state.adminProducts.products).find(
-		(prod) => prod.slug === productSlug
-	);
+	const product = useGetProducts().data?.find((prod) => prod.slug === productSlug);
 
 	if (!product) return <div>Loading...</div>;
 

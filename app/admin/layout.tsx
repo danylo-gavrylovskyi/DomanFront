@@ -4,12 +4,12 @@ import React from "react";
 import Link from "next/link";
 import { Paper } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
+import { usePathname } from "next/navigation";
 
 import { RootState } from "@/redux/store";
 import { setActiveCategory } from "@/redux/features/admin/adminGeneralSlice";
 
 import styles from "./AdminLayout.module.scss";
-import { usePathname } from "next/navigation";
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
 	const activeCategoryIndex = useSelector(

@@ -1,30 +1,29 @@
 "use client";
 
 import React from "react";
-import { useSelector } from "react-redux";
 
-import { RootState, useAppDispatch } from "@/redux/store";
-
-import { Category, Subcategory } from "@/types/category.interface";
+import { Subcategory } from "@/types/category.interface";
 
 import { AdminCategory } from "@/components/Admin/AdminCategory/AdminCategory";
 import { AdminPageLayout } from "@/components/Admin/AdminPageLayout/AdminPageLayout";
+
 import {
-	addSubcategory,
-	deleteSubcategory,
-	editSubcategory,
-	fetchSubcategories,
-} from "@/redux/features/admin/adminSubcategoriesSlice";
+	useAddSubcategory,
+	useDeleteSubcategory,
+	useEditSubcategory,
+	useGetSubcategories,
+} from "@/hooks/subcategories.hooks";
+import { useGetCategories } from "@/hooks/categories.hooks";
 
 const Subcategories = () => {
 	const [isAddingCategory, changeAddingMode] = React.useState<boolean>(false);
-	const dispatch = useAppDispatch();
-	const subcategories: Subcategory[] = useSelector(
-		(state: RootState) => state.adminSubcategories.subcategories
-	);
-	const categories: Category[] = useSelector(
-		(state: RootState) => state.adminCategories.categories
-	);
+
+	const { data: subcategories } = useGetSubcategories();
+	const { data: categories } = useGetCategories();
+
+	const addSubcategory = useAddSubcategory();
+	const editSubcategory = useEditSubcategory();
+	const deleteSubcategory = useDeleteSubcategory();
 
 	const onSaveCategory = (event: React.FormEvent<HTMLFormElement>) => {
 		event.preventDefault();
@@ -51,13 +50,13 @@ const Subcategories = () => {
 		}
 		formData.append("image", image);
 
-		dispatch(addSubcategory(formData));
+		addSubcategory(formData);
 		changeAddingMode((prev) => !prev);
 	};
 
-	React.useEffect(() => {
-		dispatch(fetchSubcategories());
-	}, []);
+	if (!subcategories || !categories) {
+		return <div>Loading...</div>;
+	}
 
 	return (
 		<AdminPageLayout

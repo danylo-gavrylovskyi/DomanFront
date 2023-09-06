@@ -7,7 +7,4 @@ export interface UpdateProduct {
 	price: number;
 	quantity: number;
 	subcategoryId: number;
-	image: File;
-	oldAttributeValues: AttributeIdValuePair[];
-	newAttributeValues: AttributeIdValuePair[];
 }

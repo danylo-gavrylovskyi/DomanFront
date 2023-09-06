@@ -11,8 +11,9 @@ import { CartProduct } from "@/types/product.interface";
 
 import { CartProductCard } from "@/components/CartProductCard/CartProductCard";
 
-import styles from "./Cart.module.scss";
 import { getCartTotalPrice } from "@/utils/getCartTotalPrice";
+
+import styles from "./Cart.module.scss";
 
 export const Cart = () => {
 	const dispatch = useDispatch();

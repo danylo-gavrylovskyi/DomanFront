@@ -14,20 +14,23 @@ import { Attribute, AttributeIdValuePair } from "@/types/attribute.interface";
 import { Product } from "@/types/product.interface";
 import { UpdateProduct } from "@/types/update-product.interface";
 
+import { findAttribute } from "@/utils/findAttribute";
+
 import styles from "../new/AddProduct.module.scss";
 
 const UpdateProduct = () => {
 	const { push } = useRouter();
 	const { id } = useParams();
 
-	const { register, handleSubmit } =
-		useForm<Omit<UpdateProduct, "newAttributeValues" | "oldAttributeValues">>();
+	const { register, handleSubmit } = useForm<UpdateProduct>();
 
 	const product = useGetProducts().data?.find((product: Product) => product.id === Number(id));
 	const { data: subcategories } = useGetSubcategories();
 	const { data: attributes } = useGetAttributes();
 
 	const editProduct = useEditProduct();
+
+	const [image, setImage] = React.useState<File | null>();
 
 	const [attributeCount, setAttributeCount] = React.useState<number>(0);
 	const [newAttributeValues, setNewAttributeValues] = React.useState<AttributeIdValuePair[]>([]);
@@ -52,59 +55,35 @@ const UpdateProduct = () => {
 		return <div>Loading...</div>;
 	}
 
-	const getAttributeById = (id: number | undefined) => {
-		return attributes.find((attribute) => attribute.id === id);
-	};
+	const onSaveProduct: SubmitHandler<UpdateProduct> = (values) => {
+		const { title, article, quantity, subcategoryId, price } = values;
 
-	const onSaveProduct: SubmitHandler<
-		Omit<UpdateProduct, "newAttributeValues" | "oldAttributeValues">
-	> = (values) => {
+		const formData = new FormData();
+		if (title !== product.title) formData.append("title", title);
+
+		if (article !== product.article) formData.append("article", article);
+
+		if (Number(quantity) !== product.quantity) formData.append("quantity", String(quantity));
+
+		if (Number(subcategoryId) !== product.subcategoryId)
+			formData.append("subcategoryId", String(subcategoryId));
+
+		if (+price !== +product.price) formData.append("price", String(price));
+
+		if (image) formData.append("image", image);
+
+		if (oldAttributeValues.length > 0)
+			formData.append("oldAttributeValues", JSON.stringify(oldAttributeValues));
+
+		if (newAttributeValues.length > 0)
+			formData.append("newAttributeValues", JSON.stringify(newAttributeValues));
+
 		editProduct({
 			productId: product.id,
-			editData: { ...values, newAttributeValues, oldAttributeValues },
+			formData,
 		});
 		push("/admin/products");
 	};
-
-	// const onSaveProduct = (event: React.FormEvent<HTMLFormElement>) => {
-	// 	event.preventDefault();
-	// 	const eventElements: HTMLFormControlsCollection = (event.target as HTMLFormElement).elements;
-
-	// 	const title: string = (eventElements.namedItem("title") as HTMLInputElement).value;
-	// 	const article: string = (eventElements.namedItem("article") as HTMLInputElement).value;
-	// 	const quantity: string = (eventElements.namedItem("quantity") as HTMLInputElement).value;
-	// 	const subcategoryId: string = (eventElements.namedItem("subcategoryId") as HTMLInputElement)
-	// 		.value;
-	// 	const price: string = (eventElements.namedItem("price") as HTMLInputElement).value;
-
-	// 	const fileInput = (event.target as HTMLFormElement).elements.namedItem(
-	// 		"image"
-	// 	) as HTMLInputElement;
-	// 	const image: File | null = fileInput?.files ? fileInput.files[0] : null;
-
-	// 	const formData = new FormData();
-	// 	if (title !== product.title) formData.append("title", title);
-
-	// 	if (article !== product.article) formData.append("article", article);
-
-	// 	if (Number(quantity) !== product.quantity) formData.append("quantity", quantity);
-
-	// 	if (Number(subcategoryId) !== product.subcategoryId)
-	// 		formData.append("subcategoryId", subcategoryId);
-
-	// 	if (+price !== +product.price) formData.append("price", price);
-
-	// 	if (image) formData.append("image", image);
-
-	// 	if (oldAttributeValues.length > 0)
-	// 		formData.append("oldAttributeValues", JSON.stringify(oldAttributeValues));
-
-	// 	if (newAttributeValues.length > 0)
-	// 		formData.append("newAttributeValues", JSON.stringify(newAttributeValues));
-
-	// 	editProduct({ productId: Number(id), formData });
-	// 	push("/admin/products");
-	// };
 
 	return (
 		<>
@@ -157,7 +136,10 @@ const UpdateProduct = () => {
 						/>
 						<label className={styles.loadImg}>
 							Обкладинка
-							<input {...register("image")} name="image" type="file"></input>
+							<input
+								onChange={(e) => setImage(e.target.files ? e.target.files[0] : null)}
+								name="image"
+								type="file"></input>
 						</label>
 					</section>
 					<section>
@@ -174,7 +156,7 @@ const UpdateProduct = () => {
 						<section key={attribute.id}>
 							<TextField
 								label="Атрибут"
-								defaultValue={getAttributeById(attribute.attributeId)?.title}
+								defaultValue={findAttribute(attributes, attribute.attributeId)?.title}
 								InputProps={{
 									readOnly: true,
 								}}

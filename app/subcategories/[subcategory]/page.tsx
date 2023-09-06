@@ -2,26 +2,28 @@
 
 import React from "react";
 import { useParams } from "next/navigation";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
-import { RootState, useAppDispatch } from "@/redux/store";
-import { fetchSubcategories } from "@/redux/features/admin/adminSubcategoriesSlice";
-import { fetchProducts } from "@/redux/features/admin/adminProductsSlice";
-import { fetchAttributes } from "@/redux/features/admin/adminAttributesSlice";
+import { RootState } from "@/redux/store";
+import { toggleFilter } from "@/redux/features/filterSlice";
+
+import { useGetSubcategories } from "@/hooks/subcategories.hooks";
+import { useGetProducts } from "@/hooks/products.hooks";
+import { useGetAttributes } from "@/hooks/attributes.hooks";
 
 import { Subcategory } from "@/types/category.interface";
 import { Product } from "@/types/product.interface";
+
+import { Filter } from "@/modules/Filter/Filter";
+import { SkeletonPage } from "@/modules/SkeletonPage/SkeletonPage";
 
 import { FilterBlock } from "@/components/FilterBlock/FilterBlock";
 import { Item } from "@/components/Item/Item";
 
 import { findUniqueAttributesInSubcategory } from "@/utils/findUniqueAttributes";
+import { findAttribute } from "@/utils/findAttribute";
 
 import styles from "@/app/categories/[category]/CategoryPage.module.scss";
-import { findAttribute } from "@/utils/findAttribute";
-import { Filter } from "@/modules/Filter/Filter";
-import { toggleFilter } from "@/redux/features/filterSlice";
-import { SkeletonPage } from "@/modules/SkeletonPage/SkeletonPage";
 
 interface UniqueAttribute {
 	attrId: number;
@@ -29,26 +31,20 @@ interface UniqueAttribute {
 }
 
 const page = () => {
-	const dispatch = useAppDispatch();
+	const dispatch = useDispatch();
 
 	let subcategoryTitle: string = useParams().subcategory as string;
 	subcategoryTitle = subcategoryTitle.replaceAll("%20", " ");
 
-	const subcategory: Subcategory | undefined = useSelector(
-		(state: RootState) => state.adminSubcategories.subcategories
-	).find((subcategory) => subcategory.title === subcategoryTitle);
-
-	React.useEffect(() => {
-		dispatch(fetchSubcategories());
-		dispatch(fetchProducts());
-		dispatch(fetchAttributes());
-	}, []);
+	const subcategory: Subcategory | undefined = useGetSubcategories().data?.find(
+		(subcategory) => subcategory.title === subcategoryTitle
+	);
 
 	const checkedAttributes = useSelector((state: RootState) => state.filter.checkedAttributes);
-	let products = useSelector((state: RootState) => state.adminProducts.products).filter(
+	let products = useGetProducts().data?.filter(
 		(product: Product) => product.subcategoryId === subcategory?.id
 	);
-	const attributes = useSelector((state: RootState) => state.adminAttributes.attributes);
+	const { data: attributes } = useGetAttributes();
 
 	if (!subcategory || !attributes || !products) {
 		return <SkeletonPage />;

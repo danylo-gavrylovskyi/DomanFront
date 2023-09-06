@@ -40,6 +40,8 @@ export const Header = () => {
 	);
 	const currentUser = useSelector((state: RootState) => state.auth.currentUser);
 
+	console.log(currentUser);
+
 	const { push } = useRouter();
 
 	useEffect(() => {
@@ -132,7 +134,7 @@ export const Header = () => {
 					</svg>
 					<span
 						onClick={() =>
-							currentUser ? push("/profile/orders") : toggleAuth((prev) => !prev)
+							currentUser.email ? push("/profile/orders") : toggleAuth((prev) => !prev)
 						}
 						className={styles.profileBtn}>
 						<svg

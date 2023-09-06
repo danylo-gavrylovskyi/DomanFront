@@ -15,8 +15,8 @@ const adminGeneralSlice = createSlice({
 			state.activeCategoryIndex = action.payload;
 			sessionStorage.setItem("activeTab", String(action.payload));
 		},
-		nextBanner: (state) => {
-			if (state.currentBanner === state.banners.length - 1) {
+		nextBanner: (state, action: PayloadAction<number>) => {
+			if (state.currentBanner === action.payload - 1) {
 				state.currentBanner = 0;
 			} else {
 				state.currentBanner++;

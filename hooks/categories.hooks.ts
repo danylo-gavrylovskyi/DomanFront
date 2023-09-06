@@ -26,8 +26,8 @@ export const useAddCategory = () => {
 export const useEditCategory = () => {
 	return useMutation(
 		[EDIT_CATEGORY_KEY],
-		({ categoryId, formData }: { categoryId: number; formData: FormData }) =>
-			CategoriesService.edit({ id: categoryId, formData }),
+		({ id, formData }: { id: number; formData: FormData }) =>
+			CategoriesService.edit({ id, formData }),
 		{
 			onSuccess() {
 				queryClient.invalidateQueries({ queryKey: [GET_CATEGORIES_KEY] });

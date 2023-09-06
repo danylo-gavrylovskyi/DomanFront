@@ -43,6 +43,7 @@ const AddProduct = () => {
 
 	const onSaveProduct: SubmitHandler<CreateProductForm> = (values) => {
 		const { article, title, description, quantity, price, subcategoryId } = values;
+
 		const formData = new FormData();
 		formData.append("article", article);
 		formData.append("title", title);
@@ -53,6 +54,7 @@ const AddProduct = () => {
 		formData.append("slug", slugify(title));
 		image && formData.append("image", image);
 		formData.append("attributeValues", JSON.stringify(attributeValues));
+
 		addProduct(formData);
 		push("/admin/products");
 	};

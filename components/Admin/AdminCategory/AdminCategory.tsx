@@ -1,23 +1,34 @@
 import React from "react";
 import { Button, Paper } from "@mui/material";
 import { UseMutateFunction } from "@tanstack/react-query";
+import { SubmitHandler, useForm } from "react-hook-form";
 
-import { Category } from "@/types/category.interface";
+import { Category, Subcategory } from "@/types/category.interface";
 
 import styles from "./AdminCategory.module.scss";
 
 interface AdminCategoryProps extends Category {
 	imageFolder?: string;
 	subcategoryParent?: Category;
-	edit: UseMutateFunction<
-		Category,
-		unknown,
-		{
-			categoryId: number;
-			formData: FormData;
-		},
-		unknown
-	>;
+	edit:
+		| UseMutateFunction<
+				Category,
+				unknown,
+				{
+					id: number;
+					formData: FormData;
+				},
+				unknown
+		  >
+		| UseMutateFunction<
+				Subcategory,
+				unknown,
+				{
+					id: number;
+					formData: FormData;
+				},
+				unknown
+		  >;
 	deleteItem: UseMutateFunction<number, unknown, number, unknown>;
 }
 
@@ -30,28 +41,19 @@ export const AdminCategory = ({
 	imageFolder = "categoriesImages",
 	subcategoryParent,
 }: AdminCategoryProps) => {
+	const { register, handleSubmit } = useForm<{ title: string }>();
+
 	const [isEditing, changeEditingMode] = React.useState<boolean>(false);
 
-	const onSaveEditCategory = async (event: React.FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
+	const [uploadedImage, setImage] = React.useState<File | null>();
 
-		const title = (
-			(event.target as HTMLFormElement).elements.namedItem("title") as HTMLInputElement
-		).value;
-
-		const fileInput = (event.target as HTMLFormElement).elements.namedItem(
-			"image"
-		) as HTMLInputElement;
-
-		const image = fileInput?.files ? fileInput.files[0] : null;
-
+	const onSaveEditCategory: SubmitHandler<{ title: string }> = (values) => {
 		const formData = new FormData();
-		formData.append("title", title);
-		if (image) {
-			formData.append("image", image);
-		}
 
-		edit({ categoryId: id, formData });
+		values.title && formData.append("title", values.title);
+		uploadedImage && formData.append("image", uploadedImage);
+
+		edit({ id, formData });
 		changeEditingMode((prev) => !prev);
 	};
 
@@ -67,13 +69,18 @@ export const AdminCategory = ({
 			<form
 				style={isEditing ? { display: "flex" } : {}}
 				className={styles.form}
-				onSubmit={onSaveEditCategory}>
+				onSubmit={handleSubmit(onSaveEditCategory)}>
 				<label className={styles.newImgLabel} htmlFor="newCategoryImg">
 					Нова обкладинка
-					<input name="image" id="newCategoryImg" type="file"></input>
+					<input
+						onChange={(e) => setImage(e.target.files ? e.target.files[0] : null)}
+						name="image"
+						id="newCategoryImg"
+						type="file"></input>
 				</label>
 
 				<input
+					{...register("title")}
 					className={styles.newTitleInput}
 					name="title"
 					placeholder="Введіть нову назву"></input>

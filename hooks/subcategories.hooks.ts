@@ -31,8 +31,8 @@ export const useAddSubcategory = () => {
 export const useEditSubcategory = () => {
 	const { mutate } = useMutation(
 		[EDIT_SUBCATEGORY_KEY],
-		({ subcategoryId, formData }: { subcategoryId: number; formData: FormData }) =>
-			SubcategoriesService.edit({ id: subcategoryId, formData }),
+		({ id, formData }: { id: number; formData: FormData }) =>
+			SubcategoriesService.edit({ id, formData }),
 		{
 			onSuccess() {
 				queryClient.invalidateQueries({ queryKey: [GET_SUBCATEGORIES_KEY] });

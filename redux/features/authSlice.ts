@@ -34,7 +34,11 @@ const initialState: AuthSliceProps = {
 const authSlice = createSlice({
 	name: "auth",
 	initialState,
-	reducers: {},
+	reducers: {
+		logout: (state) => {
+			state.currentUser = {} as User;
+		},
+	},
 	extraReducers: (builder) => {
 		builder.addCase(login.fulfilled, (state, action: PayloadAction<AuthResponse>) => {
 			state.currentUser = action.payload.user;
@@ -45,5 +49,5 @@ const authSlice = createSlice({
 	},
 });
 
-export const {} = authSlice.actions;
+export const { logout } = authSlice.actions;
 export default authSlice.reducer;

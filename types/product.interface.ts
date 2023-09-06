@@ -26,6 +26,7 @@ export interface CreateProductForm {
 
 export interface CreateProduct extends CreateProductForm {
 	slug: string;
+	image: File;
 	attributeValues: AttributeIdValuePair[];
 }
 

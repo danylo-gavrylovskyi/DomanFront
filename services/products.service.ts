@@ -1,12 +1,21 @@
 import { ApiRoutes } from "@/types/api-routes.enum";
-import { CreateProduct, Product } from "@/types/product.interface";
-import { UpdateProduct } from "@/types/update-product.interface";
+import { Pagination } from "@/types/pagination.interface";
+import { PaginationProducts, Product } from "@/types/product.interface";
 
 import customAxios from "@/utils/axios";
 
 export const ProductsService = {
+	async getAllWithPagination(queryParams?: Pagination): Promise<PaginationProducts> {
+		const { data } = await customAxios({
+			url: ApiRoutes.Products,
+			method: "GET",
+			params: queryParams,
+		});
+		return data;
+	},
+
 	async getAll(): Promise<Product[]> {
-		const { data } = await customAxios.get(ApiRoutes.Products);
+		const { data } = await customAxios.get(`${ApiRoutes.Products}/admin`);
 		return data;
 	},
 

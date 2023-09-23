@@ -1,34 +1,33 @@
 "use client";
 
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
 import { Paper } from "@mui/material";
+import { useRouter } from "next/navigation";
 
 import { changeCartStatus } from "../../redux/features/cartSlice";
 import { setIsCategClicked } from "@/redux/features/homeSlice";
 import { setIsSearchOpened, toggleHamburgerMenu } from "@/redux/features/headerSlice";
-import { RootState, useAppDispatch } from "@/redux/store";
-import { fetchProducts } from "@/redux/features/admin/adminProductsSlice";
+import { RootState } from "@/redux/store";
 
 import { Category } from "@/types/category.interface";
+import { Product } from "@/types/product.interface";
 
+import { Auth } from "../Auth/Auth";
 import { FindedProducts } from "./FindedProducts/FindedProducts";
 import { MobileSearch } from "../MobileSearch/MobileSearch";
 import { DropdownCategory } from "@/components/DropdownCategory/DropdownCategory";
 
 import styles from "./Header.module.scss";
-import { fetchCategories } from "@/redux/features/admin/adminCategoriesSlice";
-import { Auth } from "../Auth/Auth";
-import { useRouter } from "next/navigation";
 
-export const Header = () => {
-	const dispatch = useAppDispatch();
+export const Header: React.FC<{ products: Product[] }> = ({ products }) => {
+	const dispatch = useDispatch();
 
 	const [inputValue, setInputValue] = React.useState<string>("");
 	const [isAuthClicked, toggleAuth] = React.useState<boolean>(false);
 
-	const findedProducts = useSelector((state: RootState) => state.adminProducts.products)
+	const findedProducts = products
 		.filter((product) => product.title.toLowerCase().includes(inputValue.toLowerCase()))
 		.slice(0, 4);
 
@@ -40,13 +39,7 @@ export const Header = () => {
 	);
 	const currentUser = useSelector((state: RootState) => state.auth.currentUser);
 
-	console.log(currentUser);
-
 	const { push } = useRouter();
-
-	useEffect(() => {
-		dispatch(fetchProducts());
-	}, []);
 
 	return (
 		<header className={styles.header}>

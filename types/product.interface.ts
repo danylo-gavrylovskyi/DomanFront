@@ -15,6 +15,11 @@ export interface Product {
 	subcategory?: Subcategory;
 }
 
+export interface PaginationProducts {
+	rows: Product[];
+	count: number;
+}
+
 export interface CreateProductForm {
 	title: string;
 	description: string;

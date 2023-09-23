@@ -13,6 +13,7 @@ import { Category } from "@/types/category.interface";
 
 import { AdminCategory } from "@/components/Admin/AdminCategory/AdminCategory";
 import { AdminPageLayout } from "@/components/Admin/AdminPageLayout/AdminPageLayout";
+import slugify from "slugify";
 
 const Categories = () => {
 	const [isAddingCategory, changeAddingMode] = React.useState<boolean>(false);
@@ -38,6 +39,7 @@ const Categories = () => {
 
 		const formData = new FormData();
 		formData.append("title", title);
+		formData.append("slug", slugify(title));
 		if (image === null) {
 			throw new Error("You didnt choose the file");
 		}

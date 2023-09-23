@@ -5,9 +5,9 @@ import { Category } from "@/types/category.interface";
 
 import styles from "./DropdownCategory.module.scss";
 
-export const DropdownCategory = ({ title, image }: Category) => {
+export const DropdownCategory = ({ title, image, slug }: Category) => {
 	return (
-		<Link href={`/categories/${title}`}>
+		<Link href={`/categories/${slug}`}>
 			<div className={styles.container}>
 				<img
 					width="20%"

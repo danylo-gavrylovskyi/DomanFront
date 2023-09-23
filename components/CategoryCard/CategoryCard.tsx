@@ -6,19 +6,20 @@ import { Category } from "@/types/category.interface";
 import styles from "./CategoryCard.module.scss";
 import Link from "next/link";
 
-interface CategoryCardProps extends Category {
+interface CategoryCardProps extends Omit<Category, "id"> {
 	imageFolder?: string;
 }
 
 export const CategoryCard = ({
 	title,
+	slug,
 	image,
 	imageFolder = "categoriesImages",
 }: CategoryCardProps) => {
 	return (
 		<Link
 			href={
-				imageFolder !== "categoriesImages" ? `/subcategories/${title}` : `/categories/${title}`
+				imageFolder !== "categoriesImages" ? `/subcategories/${slug}` : `/categories/${slug}`
 			}>
 			<Paper elevation={3} className={styles.container}>
 				<img

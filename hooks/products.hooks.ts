@@ -9,8 +9,15 @@ import {
 	DELETE_PRODUCT_KEY,
 	EDIT_PRODUCT_KEY,
 	GET_PRODUCTS_KEY,
+	GET_PRODUCTS_WITH_PAGINATION_KEY,
 } from "@/types/constants/react-query-keys.constants";
-import { UpdateProduct } from "@/types/update-product.interface";
+import { Pagination } from "@/types/pagination.interface";
+
+export const useGetProductsWithPagination = (queryParams?: Pagination) => {
+	return useQuery([GET_PRODUCTS_WITH_PAGINATION_KEY, queryParams], () =>
+		ProductsService.getAllWithPagination(queryParams)
+	);
+};
 
 export const useGetProducts = () => {
 	return useQuery([GET_PRODUCTS_KEY], () => ProductsService.getAll());

@@ -37,6 +37,8 @@ export const findUniqueAttributesInCategory = (
 ) => {
 	let uniqueAttributes: UniqueAttribute[] = [];
 
+	if (!products) return [] as UniqueAttribute[];
+
 	category.subcategories?.forEach((subcat) => {
 		const findedSubcat = subcategories.find((sub) => sub.id === subcat.id);
 		findedSubcat?.products?.forEach((product) => {

@@ -14,6 +14,7 @@ import {
 	useGetSubcategories,
 } from "@/hooks/subcategories.hooks";
 import { useGetCategories } from "@/hooks/categories.hooks";
+import slugify from "slugify";
 
 const Subcategories = () => {
 	const [isAddingCategory, changeAddingMode] = React.useState<boolean>(false);
@@ -44,6 +45,7 @@ const Subcategories = () => {
 
 		const formData = new FormData();
 		formData.append("title", title);
+		formData.append("slug", slugify(title));
 		formData.append("categoryId", categoryId);
 		if (image === null) {
 			throw new Error("You didnt choose the file");

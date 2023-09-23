@@ -16,6 +16,7 @@ export const ADD_SUBCATEGORY_KEY = "add subcategory";
 export const EDIT_SUBCATEGORY_KEY = "edit subcategory";
 export const DELETE_SUBCATEGORY_KEY = "delete subcategory";
 
+export const GET_PRODUCTS_WITH_PAGINATION_KEY = "get products with pagination";
 export const GET_PRODUCTS_KEY = "get products";
 export const ADD_PRODUCT_KEY = "add products";
 export const EDIT_PRODUCT_KEY = "edit products";

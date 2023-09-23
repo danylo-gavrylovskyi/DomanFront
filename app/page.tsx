@@ -5,10 +5,10 @@ import { Categories } from "../modules/Categories/Categories";
 import { PopularItems } from "../modules/PopularItems/PopularItems";
 
 import { CategoriesService } from "@/services/categories.service";
-import { ProductsService } from "@/services/products.service";
+
+import { BannersService } from "@/services/banners.service";
 
 import styles from "./page.module.scss";
-import { BannersService } from "@/services/banners.service";
 
 const Home = async () => {
 	const categories = await CategoriesService.getAll();

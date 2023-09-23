@@ -8,8 +8,8 @@ import { RootState } from "@/redux/store";
 import { toggleFilter } from "@/redux/features/filterSlice";
 
 import { useGetSubcategories } from "@/hooks/subcategories.hooks";
-import { useGetProducts } from "@/hooks/products.hooks";
 import { useGetAttributes } from "@/hooks/attributes.hooks";
+import { useGetProductsWithPagination } from "@/hooks/products.hooks";
 
 import { Subcategory } from "@/types/category.interface";
 import { Product } from "@/types/product.interface";
@@ -33,15 +33,14 @@ interface UniqueAttribute {
 const page = () => {
 	const dispatch = useDispatch();
 
-	let subcategoryTitle: string = useParams().subcategory as string;
-	subcategoryTitle = subcategoryTitle.replaceAll("%20", " ");
+	let subcategorySlug: string = useParams().subcategory as string;
 
 	const subcategory: Subcategory | undefined = useGetSubcategories().data?.find(
-		(subcategory) => subcategory.title === subcategoryTitle
+		(subcategory) => subcategory.slug === subcategorySlug
 	);
 
 	const checkedAttributes = useSelector((state: RootState) => state.filter.checkedAttributes);
-	let products = useGetProducts().data?.filter(
+	let products = useGetProductsWithPagination().data?.filter(
 		(product: Product) => product.subcategoryId === subcategory?.id
 	);
 	const { data: attributes } = useGetAttributes();

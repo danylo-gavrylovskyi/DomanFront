@@ -13,7 +13,6 @@ import {
 	USE_EXCEL_TABLE,
 } from "@/types/constants/react-query-keys.constants";
 import { Pagination } from "@/types/pagination.interface";
-import { PaginationProducts } from "@/types/product.interface";
 
 export const useGetProductsWithPagination = (queryParams?: Pagination) => {
 	return useQuery([GET_PRODUCTS_WITH_PAGINATION_KEY, queryParams], () =>

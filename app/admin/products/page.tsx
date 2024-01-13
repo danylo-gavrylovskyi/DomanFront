@@ -2,19 +2,31 @@
 
 import React from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
-import { useGetProducts } from "@/hooks/products.hooks";
+import { useExcelTable, useGetProductsWithPagination } from "@/hooks/products.hooks";
 
 import { AdminProduct } from "@/components/Admin/AdminProduct";
+import { Pagination } from "@/components/Pagination/Pagination";
 
 import { Product } from "@/types/product.interface";
 
 import styles from "./AdminProducts.module.scss";
 
 const AdminProducts = () => {
-	const { data: products, isLoading, isError } = useGetProducts();
+	const addProductsViaExcel = useExcelTable();
 
-	if (isLoading || isError) {
+	const queryParams = useSearchParams();
+	const perPage = queryParams.get("perPage");
+	const page = queryParams.get("page");
+
+	let { data: products } = useGetProductsWithPagination();
+
+	if (page && perPage) {
+		products = useGetProductsWithPagination({ page, perPage }).data;
+	}
+
+	if (!products) {
 		return <div>Loading...</div>;
 	}
 
@@ -41,11 +53,36 @@ const AdminProducts = () => {
 						</g>
 					</svg>
 				</div>
+				<label className={styles.loadImg}>
+					Завантажити таблицю
+					<input
+						onChange={(e) => {
+							const formData = new FormData();
+							e.target.files &&
+								e.target.files[0] &&
+								formData.append("file", e.target.files[0]);
+							e.target.files && e.target.files[0] && addProductsViaExcel(formData);
+						}}
+						name="image"
+						type="file"></input>
+				</label>
 			</header>
 			<main className={styles.main}>
-				{products.map((product: Product) => (
+				{products.rows.map((product: Product) => (
 					<AdminProduct key={product.id} {...product} />
 				))}
+				<footer>
+					<Pagination
+						pageQuantity={
+							perPage
+								? products.count / +perPage < 1
+									? 1
+									: Math.ceil(products.count / +perPage)
+								: 1
+						}
+						currentPage={page ? +page : 1}
+					/>
+				</footer>
 			</main>
 		</>
 	);

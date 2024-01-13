@@ -24,6 +24,11 @@ export const ProductsService = {
 		return data;
 	},
 
+	async useExcelTable(excelTable: FormData): Promise<Product[]> {
+		const { data } = await customAxios.post(`${ApiRoutes.Products}/excel`, excelTable);
+		return data;
+	},
+
 	async delete(productId: number): Promise<number> {
 		const { data } = await customAxios.delete(`${ApiRoutes.Products}/${productId}`);
 		return data;

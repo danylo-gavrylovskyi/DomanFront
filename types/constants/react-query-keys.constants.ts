@@ -21,3 +21,4 @@ export const GET_PRODUCTS_KEY = "get products";
 export const ADD_PRODUCT_KEY = "add products";
 export const EDIT_PRODUCT_KEY = "edit products";
 export const DELETE_PRODUCT_KEY = "delete products";
+export const USE_EXCEL_TABLE = "add or update products via excel table";

@@ -10,8 +10,10 @@ import {
 	EDIT_PRODUCT_KEY,
 	GET_PRODUCTS_KEY,
 	GET_PRODUCTS_WITH_PAGINATION_KEY,
+	USE_EXCEL_TABLE,
 } from "@/types/constants/react-query-keys.constants";
 import { Pagination } from "@/types/pagination.interface";
+import { PaginationProducts } from "@/types/product.interface";
 
 export const useGetProductsWithPagination = (queryParams?: Pagination) => {
 	return useQuery([GET_PRODUCTS_WITH_PAGINATION_KEY, queryParams], () =>
@@ -27,6 +29,19 @@ export const useAddProduct = () => {
 	const { mutate } = useMutation(
 		[ADD_PRODUCT_KEY],
 		(productData: FormData) => ProductsService.add(productData),
+		{
+			onSuccess() {
+				queryClient.invalidateQueries({ queryKey: [GET_PRODUCTS_KEY] });
+			},
+		}
+	);
+	return mutate;
+};
+
+export const useExcelTable = () => {
+	const { mutate } = useMutation(
+		[USE_EXCEL_TABLE],
+		(excelTable: FormData) => ProductsService.useExcelTable(excelTable),
 		{
 			onSuccess() {
 				queryClient.invalidateQueries({ queryKey: [GET_PRODUCTS_KEY] });

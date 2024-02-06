@@ -1,25 +1,31 @@
 "use client";
 
 import React from "react";
+import { useSearchParams } from "next/navigation";
+import slugify from "slugify";
 
 import { Subcategory } from "@/types/category.interface";
 
 import { AdminCategory } from "@/components/Admin/AdminCategory/AdminCategory";
 import { AdminPageLayout } from "@/components/Admin/AdminPageLayout/AdminPageLayout";
+import { Pagination } from "@/components/Pagination/Pagination";
 
 import {
 	useAddSubcategory,
 	useDeleteSubcategory,
 	useEditSubcategory,
-	useGetSubcategories,
+	useGetSubcategoriesWithPagination,
 } from "@/hooks/subcategories.hooks";
 import { useGetCategories } from "@/hooks/categories.hooks";
-import slugify from "slugify";
 
 const Subcategories = () => {
+	const queryParams = useSearchParams();
+	const perPage = queryParams.get("perPage") || "4";
+	const page = queryParams.get("page") || "1";
+
 	const [isAddingCategory, changeAddingMode] = React.useState<boolean>(false);
 
-	const { data: subcategories } = useGetSubcategories();
+	const { data: subcategories } = useGetSubcategoriesWithPagination({ page, perPage });
 	const { data: categories } = useGetCategories();
 
 	const addSubcategory = useAddSubcategory();
@@ -72,7 +78,7 @@ const Subcategories = () => {
 			inputText="Назва нової підкатегорії"
 			insertImgText="Завантажити обкладинку">
 			<>
-				{subcategories.map((subcategory: Subcategory) => (
+				{subcategories.rows.map((subcategory: Subcategory) => (
 					<AdminCategory
 						key={subcategory.id}
 						edit={editSubcategory}
@@ -84,6 +90,18 @@ const Subcategories = () => {
 						{...subcategory}
 					/>
 				))}
+				<footer>
+					<Pagination
+						pageQuantity={
+							perPage && categories
+								? categories.length / +perPage < 1
+									? 1
+									: Math.ceil(categories.length / +perPage)
+								: 1
+						}
+						currentPage={page ? +page : 1}
+					/>
+				</footer>
 			</>
 		</AdminPageLayout>
 	);

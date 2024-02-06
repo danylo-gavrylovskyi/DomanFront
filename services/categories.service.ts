@@ -1,9 +1,19 @@
-import { Category } from "@/types/category.interface";
+import { Category, PaginationCategory } from "@/types/category.interface";
 import { ApiRoutes } from "@/types/api-routes.enum";
+import { Pagination } from "@/types/pagination.interface";
 
 import customAxios from "@/utils/axios";
 
 export const CategoriesService = {
+	async getAllWithPagination(queryParams?: Pagination): Promise<PaginationCategory> {
+		const { data } = await customAxios({
+			url: `${ApiRoutes.Categories}/pagination`,
+			method: "GET",
+			params: queryParams,
+		});
+		return data;
+	},
+
 	async getAll(): Promise<Category[]> {
 		const { data } = await customAxios.get(ApiRoutes.Categories);
 		return data;

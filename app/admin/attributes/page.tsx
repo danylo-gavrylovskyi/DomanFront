@@ -1,18 +1,28 @@
 "use client";
 
 import React from "react";
+import { useSearchParams } from "next/navigation";
 
 import { Attribute } from "@/types/attribute.interface";
 
 import { AdminPageLayout } from "@/components/Admin/AdminPageLayout/AdminPageLayout";
 import { AdminAttribute } from "@/components/Admin/AdminAttribute/AdminAttribute";
 
-import { useAddAttribute, useDeleteAttribute, useGetAttributes } from "@/hooks/attributes.hooks";
+import {
+	useAddAttribute,
+	useDeleteAttribute,
+	useGetAttributesWithPagination,
+} from "@/hooks/attributes.hooks";
+import { Pagination } from "@/components/Pagination/Pagination";
 
-const page = () => {
+const Attributes = () => {
+	const queryParams = useSearchParams();
+	const perPage = queryParams.get("perPage") || "4";
+	const page = queryParams.get("page") || "1";
+
 	const [isAddingAttribute, changeAddingMode] = React.useState<boolean>(false);
 
-	const { data: attributes } = useGetAttributes();
+	const { data: attributes } = useGetAttributesWithPagination({ page, perPage });
 
 	const { mutate: addAttribute } = useAddAttribute();
 	const { mutate: deleteAttribute } = useDeleteAttribute();
@@ -42,7 +52,7 @@ const page = () => {
 			inputText="Назва атрибуту"
 			createBtnText="Додати атрибут">
 			<>
-				{attributes.map((attribute: Attribute) => (
+				{attributes.rows.map((attribute: Attribute) => (
 					<AdminAttribute
 						key={attribute.id}
 						deleteAttribute={deleteAttribute}
@@ -50,8 +60,21 @@ const page = () => {
 					/>
 				))}
 			</>
+
+			<footer>
+				<Pagination
+					pageQuantity={
+						perPage && attributes
+							? attributes.count / +perPage < 1
+								? 1
+								: Math.ceil(attributes.count / +perPage)
+							: 1
+					}
+					currentPage={page ? +page : 1}
+				/>
+			</footer>
 		</AdminPageLayout>
 	);
 };
 
-export default page;
+export default Attributes;

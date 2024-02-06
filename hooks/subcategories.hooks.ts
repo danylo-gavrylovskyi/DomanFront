@@ -9,7 +9,15 @@ import {
 	DELETE_SUBCATEGORY_KEY,
 	EDIT_SUBCATEGORY_KEY,
 	GET_SUBCATEGORIES_KEY,
+	GET_SUBCATEGORIES_WITH_PAGINATION_KEY,
 } from "@/types/constants/react-query-keys.constants";
+import { Pagination } from "@/types/pagination.interface";
+
+export const useGetSubcategoriesWithPagination = (queryParams?: Pagination) => {
+	return useQuery([GET_SUBCATEGORIES_WITH_PAGINATION_KEY, queryParams], () =>
+		SubcategoriesService.getAllWithPagination(queryParams)
+	);
+};
 
 export const useGetSubcategories = () => {
 	return useQuery([GET_SUBCATEGORIES_KEY], () => SubcategoriesService.getAll());

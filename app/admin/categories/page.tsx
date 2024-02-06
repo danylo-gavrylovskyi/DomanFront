@@ -1,24 +1,34 @@
 "use client";
 
 import React from "react";
+import { useSearchParams } from "next/navigation";
+import slugify from "slugify";
 
 import {
 	useAddCategory,
 	useDeleteCategory,
 	useEditCategory,
-	useGetCategories,
+	useGetCategoriesWithPagination,
 } from "@/hooks/categories.hooks";
-
-import { Category } from "@/types/category.interface";
 
 import { AdminCategory } from "@/components/Admin/AdminCategory/AdminCategory";
 import { AdminPageLayout } from "@/components/Admin/AdminPageLayout/AdminPageLayout";
-import slugify from "slugify";
+import { Pagination } from "@/components/Pagination/Pagination";
+
+import { Category } from "@/types/category.interface";
 
 const Categories = () => {
+	const queryParams = useSearchParams();
+	const perPage = queryParams.get("perPage") || "4";
+	const page = queryParams.get("page") || "1";
+
 	const [isAddingCategory, changeAddingMode] = React.useState<boolean>(false);
 
-	const { data: categories, isLoading, isError } = useGetCategories();
+	const {
+		data: categories,
+		isLoading,
+		isError,
+	} = useGetCategoriesWithPagination({ page, perPage });
 
 	const { mutate: addCategory } = useAddCategory();
 	const { mutate: editCategory } = useEditCategory();
@@ -49,7 +59,7 @@ const Categories = () => {
 		changeAddingMode((prev) => !prev);
 	};
 
-	if (isLoading || isError) {
+	if (!categories || isLoading || isError) {
 		return <div>Loading...</div>;
 	}
 
@@ -63,7 +73,7 @@ const Categories = () => {
 			inputText="Назва нової категорії"
 			insertImgText="Завантажити обкладинку">
 			<>
-				{categories.map((category: Category) => (
+				{categories.rows.map((category: Category) => (
 					<AdminCategory
 						key={category.id}
 						edit={editCategory}
@@ -72,6 +82,18 @@ const Categories = () => {
 					/>
 				))}
 			</>
+			<footer>
+				<Pagination
+					pageQuantity={
+						perPage && categories
+							? categories.count / +perPage < 1
+								? 1
+								: Math.ceil(categories.count / +perPage)
+							: 1
+					}
+					currentPage={page ? +page : 1}
+				/>
+			</footer>
 		</AdminPageLayout>
 	);
 };

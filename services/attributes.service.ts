@@ -1,9 +1,19 @@
 import { ApiRoutes } from "@/types/api-routes.enum";
-import { Attribute } from "@/types/attribute.interface";
+import { Attribute, PaginationAttribute } from "@/types/attribute.interface";
+import { Pagination } from "@/types/pagination.interface";
 
 import customAxios from "@/utils/axios";
 
 export const AttributesService = {
+	async getAllWithPagination(queryParams?: Pagination): Promise<PaginationAttribute> {
+		const { data } = await customAxios({
+			url: `${ApiRoutes.Attributes}/pagination`,
+			method: "GET",
+			params: queryParams,
+		});
+		return data;
+	},
+
 	async getAll(): Promise<Attribute[]> {
 		const { data } = await customAxios.get(ApiRoutes.Attributes);
 		return data;

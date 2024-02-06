@@ -7,9 +7,17 @@ import {
 	DELETE_CATEGORY_KEY,
 	EDIT_CATEGORY_KEY,
 	GET_CATEGORIES_KEY,
+	GET_CATEGORIES_WITH_PAGINATION_KEY,
 } from "@/types/constants/react-query-keys.constants";
+import { Pagination } from "@/types/pagination.interface";
 
 import { queryClient } from "@/components/LayoutProvider";
+
+export const useGetCategoriesWithPagination = (queryParams?: Pagination) => {
+	return useQuery([GET_CATEGORIES_WITH_PAGINATION_KEY, queryParams], () =>
+		CategoriesService.getAllWithPagination(queryParams)
+	);
+};
 
 export const useGetCategories = () => {
 	return useQuery([GET_CATEGORIES_KEY], () => CategoriesService.getAll());

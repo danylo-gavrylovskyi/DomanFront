@@ -23,7 +23,7 @@ const AdminProducts = () => {
 	const perPage = queryParams.get("perPage") || "4";
 	const page = queryParams.get("page") || "1";
 
-	let { data: products } = useGetProductsWithPagination({ page, perPage, inputValue });
+	const { data: products } = useGetProductsWithPagination({ page, perPage, inputValue });
 
 	return (
 		<>

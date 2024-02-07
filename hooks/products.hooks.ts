@@ -13,6 +13,7 @@ import {
 	USE_EXCEL_TABLE,
 } from "@/types/constants/react-query-keys.constants";
 import { Pagination } from "@/types/pagination.interface";
+import { FindOptions } from "@/types/findOptions.interface";
 
 export const useGetProductsWithPagination = (queryParams?: Pagination) => {
 	return useQuery([GET_PRODUCTS_WITH_PAGINATION_KEY, queryParams], () =>
@@ -20,8 +21,8 @@ export const useGetProductsWithPagination = (queryParams?: Pagination) => {
 	);
 };
 
-export const useGetProducts = () => {
-	return useQuery([GET_PRODUCTS_KEY], () => ProductsService.getAll());
+export const useGetProducts = (queryParams?: FindOptions) => {
+	return useQuery([GET_PRODUCTS_KEY, queryParams], () => ProductsService.getAll(queryParams));
 };
 
 export const useAddProduct = () => {

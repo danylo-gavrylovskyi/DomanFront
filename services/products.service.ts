@@ -1,4 +1,5 @@
 import { ApiRoutes } from "@/types/api-routes.enum";
+import { FindOptions } from "@/types/findOptions.interface";
 import { Pagination } from "@/types/pagination.interface";
 import { PaginationProducts, Product } from "@/types/product.interface";
 
@@ -14,8 +15,12 @@ export const ProductsService = {
 		return data;
 	},
 
-	async getAll(): Promise<Product[]> {
-		const { data } = await customAxios.get(`${ApiRoutes.Products}/admin`);
+	async getAll(queryParams?: FindOptions): Promise<Product[]> {
+		const { data } = await customAxios({
+			url: `${ApiRoutes.Products}/admin`,
+			method: "GET",
+			params: queryParams,
+		});
 		return data;
 	},
 

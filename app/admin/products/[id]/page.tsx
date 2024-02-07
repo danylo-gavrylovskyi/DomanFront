@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { MenuItem, TextField } from "@mui/material";
+import { Checkbox, MenuItem, TextField } from "@mui/material";
 import { useRouter, useParams } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
 
@@ -56,25 +56,19 @@ const UpdateProduct = () => {
 	}
 
 	const onSaveProduct: SubmitHandler<UpdateProduct> = (values) => {
-		const { title, article, quantity, subcategoryId, price } = values;
+		const { title, article, quantity, subcategoryId, price, isPopular } = values;
 
 		const formData = new FormData();
 		if (title !== product.title) formData.append("title", title);
-
 		if (article !== product.article) formData.append("article", article);
-
+		if (isPopular !== product.isPopular) formData.append("isPopular", JSON.stringify(isPopular));
 		if (Number(quantity) !== product.quantity) formData.append("quantity", String(quantity));
-
 		if (Number(subcategoryId) !== product.subcategoryId)
 			formData.append("subcategoryId", String(subcategoryId));
-
 		if (+price !== +product.price) formData.append("price", String(price));
-
 		if (image) formData.append("image", image);
-
 		if (oldAttributeValues.length > 0)
 			formData.append("oldAttributeValues", JSON.stringify(oldAttributeValues));
-
 		if (newAttributeValues.length > 0)
 			formData.append("newAttributeValues", JSON.stringify(newAttributeValues));
 
@@ -215,6 +209,13 @@ const UpdateProduct = () => {
 							)}
 						</section>
 					))}
+					<section>
+						<b>Популярний товар</b>
+						<Checkbox
+							{...register("isPopular")}
+							inputProps={{ "aria-label": "Checkbox demo" }}
+						/>
+					</section>
 					<footer>
 						<button type="submit">Зберегти</button>
 						<button type="button" onClick={() => setAttributeCount((prev) => ++prev)}>

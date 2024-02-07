@@ -11,6 +11,7 @@ export interface Product {
 	subcategoryId: number;
 	price: number;
 	image: string;
+	isPopular?: boolean;
 	attributes?: Attribute[];
 	subcategory?: Subcategory;
 }

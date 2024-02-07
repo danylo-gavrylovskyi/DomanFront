@@ -1,5 +1,3 @@
-import { AttributeIdValuePair } from "./attribute.interface";
-
 export interface UpdateProduct {
 	title: string;
 	article: string;
@@ -7,4 +5,5 @@ export interface UpdateProduct {
 	price: number;
 	quantity: number;
 	subcategoryId: number;
+	isPopular: boolean;
 }

@@ -2,7 +2,6 @@
 
 import React from "react";
 import { Paper } from "@mui/material";
-import slugify from "slugify";
 import Link from "next/link";
 
 import { useAppDispatch } from "@/redux/store";
@@ -16,28 +15,40 @@ export const Item = (product: Product) => {
 	const dispatch = useAppDispatch();
 
 	return (
-		<Paper elevation={3} style={{ display: "flex", flexDirection: "column" }}>
-			<Link href={`/products/${product.slug}`}>
-				<section className={styles.imgBg}>
-					<img
-						width="100%"
-						src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/productsImages/${product.image}`}
-						alt="item"></img>
+		<>
+			<Paper
+				elevation={3}
+				style={{ display: "flex", flexDirection: "column", position: "relative" }}>
+				<Link href={`/products/${product.slug}`}>
+					<section className={styles.imgBg}>
+						<img
+							width="100%"
+							src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/productsImages/${product.image}`}
+							alt="item"></img>
+					</section>
+				</Link>
+				<section>
+					<div className={styles.title}>
+						<Link href={`/products/${product.slug}`}>
+							<span>{product.title}</span>
+						</Link>
+					</div>
+					<div className={styles.buyBtnAndPrice}>
+						<button onClick={() => dispatch(addToCart(product))} className={styles.addToCart}>
+							Додати
+						</button>
+						<span>{product.price}грн.</span>
+					</div>
+
+					{product.quantity >= 0 && <p className={styles.notInStockText}>Немає в наявності</p>}
 				</section>
-			</Link>
-			<section>
-				<div className={styles.title}>
+
+				{product.quantity >= 0 && (
 					<Link href={`/products/${product.slug}`}>
-						<span>{product.title}</span>
+						<div className={styles.cardBackgroundTint}></div>
 					</Link>
-				</div>
-				<div className={styles.buyBtnAndPrice}>
-					<button onClick={() => dispatch(addToCart(product))} className={styles.addToCart}>
-						Додати
-					</button>
-					<span>{product.price}грн.</span>
-				</div>
-			</section>
-		</Paper>
+				)}
+			</Paper>
+		</>
 	);
 };

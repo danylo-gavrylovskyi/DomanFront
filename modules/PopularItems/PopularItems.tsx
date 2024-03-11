@@ -19,7 +19,7 @@ export const PopularItems = () => {
 			<p>Популярні товари</p>
 			<main className={styles.mainGrid}>
 				{products.map((product) => (
-					<Item {...product}></Item>
+					<Item key={product.id} {...product}></Item>
 				))}
 			</main>
 		</div>

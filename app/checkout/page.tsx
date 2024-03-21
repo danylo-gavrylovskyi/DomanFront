@@ -9,8 +9,8 @@ import Link from "next/link";
 import { RootState, useAppDispatch } from "@/redux/store";
 import { clearCart } from "@/redux/features/cartSlice";
 
-import { OrdersService } from "@/services/orders/orders.service";
-import { Order } from "@/services/orders/order.interface";
+import { OrdersService } from "@/services/orders.service";
+import { Order } from "@/types/order.interface";
 
 import { getCartTotalPrice } from "@/utils/getCartTotalPrice";
 

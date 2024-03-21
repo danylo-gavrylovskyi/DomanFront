@@ -2,12 +2,12 @@
 
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
 
 import { RootState } from "@/redux/store";
 import { logout } from "@/redux/features/authSlice";
 
 import styles from "./styles.module.scss";
-import { useRouter } from "next/navigation";
 
 const layout = ({ children }: { children: React.ReactNode }) => {
 	const dispatch = useDispatch();

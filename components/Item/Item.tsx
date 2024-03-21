@@ -40,10 +40,10 @@ export const Item = (product: Product) => {
 						<span>{product.price}грн.</span>
 					</div>
 
-					{product.quantity >= 0 && <p className={styles.notInStockText}>Немає в наявності</p>}
+					{product.quantity <= 0 && <p className={styles.notInStockText}>Немає в наявності</p>}
 				</section>
 
-				{product.quantity >= 0 && (
+				{product.quantity <= 0 && (
 					<Link href={`/products/${product.slug}`}>
 						<div className={styles.cardBackgroundTint}></div>
 					</Link>

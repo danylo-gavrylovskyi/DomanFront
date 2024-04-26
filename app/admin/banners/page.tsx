@@ -40,8 +40,6 @@ const Banners = () => {
 		return <div>Loading...</div>;
 	}
 
-	console.log(banners);
-
 	return (
 		<AdminPageLayout
 			isAdding={isAddingBanner}

@@ -53,15 +53,15 @@ const page = () => {
 							key={order.id}
 							style={{ marginBottom: "1%" }}>
 							{extendedOrders.includes(index) ? (
-								<Order
+								<ExtendedOrder
+									user={currentUser}
 									orderId={order.id}
 									totalPrice={order.totalPrice}
 									createdAt={formattedDate}
 									orderProducts={order.orderProducts}
 								/>
 							) : (
-								<ExtendedOrder
-									user={currentUser}
+								<Order
 									orderId={order.id}
 									totalPrice={order.totalPrice}
 									createdAt={formattedDate}

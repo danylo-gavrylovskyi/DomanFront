@@ -36,7 +36,7 @@ export const ExtendedOrder = ({
 				</div>
 			</header>
 
-			<main className={styles.flexRowAlignCenter}>
+			<main className={styles.flexRowAlignCenter} style={{ alignItems: "flex-start" }}>
 				<div className={styles.receiver}>
 					<span className={styles.bold}>Отримувач замовлення</span>
 					<span>

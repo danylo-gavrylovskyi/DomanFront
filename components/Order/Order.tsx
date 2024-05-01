@@ -4,9 +4,11 @@ import { OrderProps } from "./orderProps.interface";
 
 import styles from "./order.module.scss";
 
-export const Order = ({ orderId, totalPrice, createdAt, orderProducts }: OrderProps) => {
+export const Order = ({ orderId, totalPrice, createdAt, orderProducts, height }: OrderProps) => {
 	return (
-		<section className={`${styles.minimizedOrder} ${styles.flexRowAlignCenter}`}>
+		<section
+			style={{ height }}
+			className={`${styles.minimizedOrder} ${styles.flexRowAlignCenter}`}>
 			<div className={styles.sideInfo}>
 				<span className={styles.bold}>№ {orderId}</span> від {createdAt}
 			</div>

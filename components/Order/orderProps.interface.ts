@@ -5,4 +5,5 @@ export interface OrderProps {
 	totalPrice: number;
 	createdAt: string;
 	orderProducts: OrderProduct[];
+	height?: string;
 }

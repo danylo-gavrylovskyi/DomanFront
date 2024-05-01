@@ -23,6 +23,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
 		{ href: "subcategories", name: "Підкатегорії" },
 		{ href: "banners", name: "Банери" },
 		{ href: "attributes", name: "Атрибути" },
+		{ href: "orders", name: "Замовлення" },
 	];
 
 	const pathname = usePathname().split("/");

@@ -6,11 +6,11 @@ import { User } from "@/types/user.interface";
 import styles from "./order.module.scss";
 
 interface ExtendedOrderProps extends OrderProps {
-	user: User;
+	customer: Omit<User, "password" | "isAdmin">;
 }
 
 export const ExtendedOrder = ({
-	user,
+	customer,
 	orderId,
 	totalPrice,
 	createdAt,
@@ -40,10 +40,10 @@ export const ExtendedOrder = ({
 				<div className={styles.receiver}>
 					<span className={styles.bold}>Отримувач замовлення</span>
 					<span>
-						{user.firstName} {user.lastName}
+						{customer.firstName} {customer.lastName}
 					</span>
-					<span>{user.phoneNumber}</span>
-					<span>{user.email}</span>
+					<span>{customer.phoneNumber}</span>
+					<span>{customer.email}</span>
 				</div>
 
 				<div>

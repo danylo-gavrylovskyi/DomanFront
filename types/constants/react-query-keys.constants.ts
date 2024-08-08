@@ -28,3 +28,5 @@ export const DELETE_PRODUCT_KEY = "delete products";
 export const USE_EXCEL_TABLE = "add or update products via excel table";
 
 export const GET_ORDERS_WITH_PAGINATION_KEY = "get orders with pagination";
+export const GET_ORDERS_BY_PHONE_NUMBER_PAGINATION_KEY =
+	"get orders by phone number with pagination";

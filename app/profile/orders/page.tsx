@@ -4,7 +4,10 @@ import React from "react";
 import { useSearchParams } from "next/navigation";
 import { useSelector } from "react-redux";
 
-import { useGetOrdersWithPagination } from "@/hooks/orders.hook";
+import {
+	useGetOrdersByPhoneNumberPagination,
+	useGetOrdersWithPagination,
+} from "@/hooks/orders.hook";
 
 import { RootState } from "@/redux/store";
 
@@ -21,7 +24,11 @@ const page = () => {
 
 	const currentUser = useSelector((state: RootState) => state.auth.currentUser);
 
-	const { data: orders } = useGetOrdersWithPagination({ page, perPage });
+	const { data: orders } = useGetOrdersByPhoneNumberPagination({
+		page,
+		perPage,
+		phoneNumber: currentUser.phoneNumber,
+	});
 
 	const [extendedOrders, setExtendedOrders] = React.useState<number[]>([]);
 
@@ -37,7 +44,7 @@ const page = () => {
 		<div style={{ width: "100%" }}>
 			<p className={styles.title}>Мої замовлення</p>
 
-			{orders &&
+			{orders ? (
 				orders.rows.map((order, index) => {
 					const options: Intl.DateTimeFormatOptions = {
 						year: "numeric",
@@ -54,7 +61,7 @@ const page = () => {
 							style={{ marginBottom: "1%" }}>
 							{extendedOrders.includes(index) ? (
 								<ExtendedOrder
-									user={currentUser}
+									customer={currentUser}
 									orderId={order.id}
 									totalPrice={order.totalPrice}
 									createdAt={formattedDate}
@@ -70,7 +77,10 @@ const page = () => {
 							)}
 						</div>
 					);
-				})}
+				})
+			) : (
+				<div>No orders</div>
+			)}
 
 			<footer>
 				{orders && orders?.count > 10 && (

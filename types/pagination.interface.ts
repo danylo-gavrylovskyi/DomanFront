@@ -3,3 +3,7 @@ export interface Pagination {
 	perPage?: string;
 	inputValue?: string;
 }
+
+export interface PaginationWithPhoneNumber extends Pagination {
+	phoneNumber: string;
+}

@@ -30,3 +30,6 @@ export const USE_EXCEL_TABLE = "add or update products via excel table";
 export const GET_ORDERS_WITH_PAGINATION_KEY = "get orders with pagination";
 export const GET_ORDERS_BY_PHONE_NUMBER_PAGINATION_KEY =
 	"get orders by phone number with pagination";
+
+export const GET_COMPANY_DETAILS_KEY = "get company details";
+export const UPDATE_COMPANY_DETAILS_KEY = "add company details or update if they exist";

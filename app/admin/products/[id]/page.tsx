@@ -18,7 +18,7 @@ import { findAttribute } from "@/utils/findAttribute";
 
 import styles from "../new/AddProduct.module.scss";
 
-const UpdateProduct = () => {
+const UpdateProductPage = () => {
 	const { push } = useRouter();
 	const { id } = useParams();
 
@@ -228,4 +228,4 @@ const UpdateProduct = () => {
 	);
 };
 
-export default UpdateProduct;
+export default UpdateProductPage;

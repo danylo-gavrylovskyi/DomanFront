@@ -3,20 +3,11 @@
 import React from "react";
 import Link from "next/link";
 import { Paper } from "@mui/material";
-import { useSelector, useDispatch } from "react-redux";
 import { usePathname } from "next/navigation";
-
-import { RootState } from "@/redux/store";
-import { setActiveCategory } from "@/redux/features/admin/adminGeneralSlice";
 
 import styles from "./AdminLayout.module.scss";
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
-	const activeCategoryIndex = useSelector(
-		(state: RootState) => state.adminGeneral.activeCategoryIndex
-	);
-	const dispatch = useDispatch();
-
 	const sections = [
 		{ href: "products", name: "Товари" },
 		{ href: "categories", name: "Категорії" },
@@ -24,6 +15,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
 		{ href: "banners", name: "Банери" },
 		{ href: "attributes", name: "Атрибути" },
 		{ href: "orders", name: "Замовлення" },
+		{ href: "company-details", name: "Про компанію" },
 	];
 
 	const pathname = usePathname().split("/");
@@ -40,9 +32,6 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
 					{sections.map((section, index) => (
 						<Link key={section.href} href={`/admin/${section.href}`}>
 							<section
-								onClick={() => {
-									dispatch(setActiveCategory(index));
-								}}
 								className={
 									pathname[pathname.length - 1] === section.href ? styles.active : ""
 								}>
@@ -50,27 +39,6 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
 							</section>
 						</Link>
 					))}
-					<section
-						onClick={() => {
-							dispatch(setActiveCategory(sections.length));
-						}}
-						className={activeCategoryIndex === sections.length ? styles.active : ""}>
-						Сторінки
-						<svg
-							xmlns="http://www.w3.org/2000/svg"
-							width="30px"
-							height="30px"
-							viewBox="0 0 24 24"
-							fill="none">
-							<path
-								d="M7 10L12 15L17 10"
-								stroke="#fff"
-								strokeWidth="1.5"
-								strokeLinecap="round"
-								strokeLinejoin="round"
-							/>
-						</svg>
-					</section>
 				</div>
 			</aside>
 			<Paper className={styles.paper} elevation={3}>

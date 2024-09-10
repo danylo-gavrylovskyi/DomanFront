@@ -7,4 +7,5 @@ export enum ApiRoutes {
 	Products = "/products",
 	Subcategories = "/subcategories",
 	Users = "/users",
+	CompanyDetails = "/company-details",
 }

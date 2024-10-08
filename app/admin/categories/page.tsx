@@ -13,7 +13,6 @@ import {
 
 import { AdminCategory } from "@/components/Admin/AdminCategory/AdminCategory";
 import { AdminPageLayout } from "@/components/Admin/AdminPageLayout/AdminPageLayout";
-import { Pagination } from "@/components/Pagination/Pagination";
 
 import { Category } from "@/types/category.interface";
 
@@ -71,7 +70,10 @@ const Categories = () => {
 			isInputNeeded={true}
 			createBtnText="Додати категорію"
 			inputText="Назва нової категорії"
-			insertImgText="Завантажити обкладинку">
+			insertImgText="Завантажити обкладинку"
+			page={page}
+			perPage={perPage}
+			elementsCount={categories.count}>
 			<>
 				{categories.rows.map((category: Category) => (
 					<AdminCategory
@@ -82,18 +84,6 @@ const Categories = () => {
 					/>
 				))}
 			</>
-			<footer>
-				<Pagination
-					pageQuantity={
-						perPage && categories
-							? categories.count / +perPage < 1
-								? 1
-								: Math.ceil(categories.count / +perPage)
-							: 1
-					}
-					currentPage={page ? +page : 1}
-				/>
-			</footer>
 		</AdminPageLayout>
 	);
 };

@@ -1,10 +1,11 @@
 import React from "react";
+import { MenuItem, TextField } from "@mui/material";
+
+import { Pagination } from "@/components/Pagination/Pagination";
 
 import { Category } from "@/types/category.interface";
 
-import { MenuItem, TextField } from "@mui/material";
-
-import styles from "./AdminHeader.module.scss";
+import styles from "./AdminPageLayout.module.scss";
 
 interface AdminPageProps {
 	isAdding: boolean;
@@ -18,6 +19,9 @@ interface AdminPageProps {
 	createBtnText: string;
 	inputText?: string;
 	insertImgText?: string;
+	page: string;
+	perPage: string;
+	elementsCount: number;
 }
 
 export const AdminPageLayout = ({
@@ -32,6 +36,9 @@ export const AdminPageLayout = ({
 	createBtnText,
 	inputText,
 	insertImgText,
+	page,
+	perPage,
+	elementsCount,
 }: AdminPageProps) => {
 	return (
 		<>
@@ -75,6 +82,12 @@ export const AdminPageLayout = ({
 				</form>
 			</header>
 			<main className={styles.main}>{children}</main>
+			<footer className={styles.footer}>
+				<Pagination
+					pageQuantity={elementsCount / +perPage < 1 ? 1 : Math.ceil(elementsCount / +perPage)}
+					currentPage={page ? +page : 1}
+				/>
+			</footer>
 		</>
 	);
 };

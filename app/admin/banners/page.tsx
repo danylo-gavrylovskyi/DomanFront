@@ -7,7 +7,6 @@ import { useAddBanner, useDeleteBanner, useGetBannersWithPagination } from "@/ho
 
 import { AdminBanner } from "@/components/Admin/AdminBanner/AdminBanner";
 import { AdminPageLayout } from "@/components/Admin/AdminPageLayout/AdminPageLayout";
-import { Pagination } from "@/components/Pagination/Pagination";
 
 const Banners = () => {
 	const queryParams = useSearchParams();
@@ -46,25 +45,15 @@ const Banners = () => {
 			onSaveForm={onSaveBanner}
 			changeAddingMode={changeAddingMode}
 			createBtnText="Додати новий банер"
-			insertImgText="Завантажити банер">
+			insertImgText="Завантажити банер"
+			page={page}
+			perPage={perPage}
+			elementsCount={banners.count}>
 			<>
 				{banners.rows.map((banner: string) => (
 					<AdminBanner key={banner} deleteBanner={deleteBanner} bannerUrl={banner} />
 				))}
 			</>
-
-			<footer>
-				<Pagination
-					pageQuantity={
-						perPage && banners
-							? banners.count / +perPage < 1
-								? 1
-								: Math.ceil(banners.count / +perPage)
-							: 1
-					}
-					currentPage={page ? +page : 1}
-				/>
-			</footer>
 		</AdminPageLayout>
 	);
 };

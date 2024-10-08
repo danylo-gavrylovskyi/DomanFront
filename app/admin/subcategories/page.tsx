@@ -8,7 +8,6 @@ import { Subcategory } from "@/types/category.interface";
 
 import { AdminCategory } from "@/components/Admin/AdminCategory/AdminCategory";
 import { AdminPageLayout } from "@/components/Admin/AdminPageLayout/AdminPageLayout";
-import { Pagination } from "@/components/Pagination/Pagination";
 
 import {
 	useAddSubcategory,
@@ -76,7 +75,10 @@ const Subcategories = () => {
 			categories={categories}
 			createBtnText="Додати підкатегорію"
 			inputText="Назва нової підкатегорії"
-			insertImgText="Завантажити обкладинку">
+			insertImgText="Завантажити обкладинку"
+			page={page}
+			perPage={perPage}
+			elementsCount={subcategories.count}>
 			<>
 				{subcategories.rows.map((subcategory: Subcategory) => (
 					<AdminCategory
@@ -90,18 +92,6 @@ const Subcategories = () => {
 						{...subcategory}
 					/>
 				))}
-				<footer>
-					<Pagination
-						pageQuantity={
-							perPage && categories
-								? categories.length / +perPage < 1
-									? 1
-									: Math.ceil(categories.length / +perPage)
-								: 1
-						}
-						currentPage={page ? +page : 1}
-					/>
-				</footer>
 			</>
 		</AdminPageLayout>
 	);

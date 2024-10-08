@@ -13,7 +13,6 @@ import {
 	useDeleteAttribute,
 	useGetAttributesWithPagination,
 } from "@/hooks/attributes.hooks";
-import { Pagination } from "@/components/Pagination/Pagination";
 
 const Attributes = () => {
 	const queryParams = useSearchParams();
@@ -50,7 +49,10 @@ const Attributes = () => {
 			isImageInputNeeded={false}
 			isInputNeeded={true}
 			inputText="Назва атрибуту"
-			createBtnText="Додати атрибут">
+			createBtnText="Додати атрибут"
+			page={page}
+			perPage={perPage}
+			elementsCount={attributes.count}>
 			<>
 				{attributes.rows.map((attribute: Attribute) => (
 					<AdminAttribute
@@ -60,19 +62,6 @@ const Attributes = () => {
 					/>
 				))}
 			</>
-
-			<footer>
-				<Pagination
-					pageQuantity={
-						perPage && attributes
-							? attributes.count / +perPage < 1
-								? 1
-								: Math.ceil(attributes.count / +perPage)
-							: 1
-					}
-					currentPage={page ? +page : 1}
-				/>
-			</footer>
 		</AdminPageLayout>
 	);
 };

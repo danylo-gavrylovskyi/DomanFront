@@ -21,7 +21,8 @@ export const CartProductCard = (props: CartProduct) => {
 					<span>{title}</span>
 					<button
 						onClick={() => dispatch(removeFromCart(id))}
-						className={styles.removeProduct}>
+						className={styles.removeProduct}
+						data-testid="removeProduct">
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							width="30px"

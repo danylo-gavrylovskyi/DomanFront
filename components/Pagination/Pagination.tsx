@@ -1,7 +1,8 @@
 import React from "react";
 
-import styles from "./pagination.module.scss";
 import { useUpdateQueryParams } from "@/utils/updateQueryParams";
+
+import styles from "./pagination.module.scss";
 
 interface PaginationProps {
 	pageQuantity: number;
@@ -25,7 +26,11 @@ export const Pagination: React.FC<PaginationProps> = ({ pageQuantity, currentPag
 
 	return (
 		<nav className={styles.container}>
-			<button onClick={getPreviousPage}>
+			<button
+				onClick={getPreviousPage}
+				disabled={currentPage === 1}
+				className={currentPage === 1 ? styles.disabledButton : ""}
+			>
 				<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 24 24" fill="none">
 					<path
 						d="M4 12H20M4 12L8 8M4 12L8 16"
@@ -44,7 +49,11 @@ export const Pagination: React.FC<PaginationProps> = ({ pageQuantity, currentPag
 					{index + 1}
 				</button>
 			))}
-			<button onClick={getNextPage}>
+			<button
+				onClick={getNextPage}
+				disabled={currentPage === pageQuantity}
+				className={currentPage === pageQuantity ? styles.disabledButton : ""}
+			>
 				<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 24 24" fill="none">
 					<path
 						d="M4 12H20M20 12L16 8M20 12L16 16"

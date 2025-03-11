@@ -1,13 +1,8 @@
 import React from "react";
 
-import { OrderProps } from "./orderProps.interface";
-import { User } from "@/types/user.interface";
+import { ExtendedOrderProps } from "./orderProps.interface";
 
 import styles from "./order.module.scss";
-
-interface ExtendedOrderProps extends OrderProps {
-	customer: Omit<User, "password" | "isAdmin">;
-}
 
 export const ExtendedOrder = ({
 	customer,

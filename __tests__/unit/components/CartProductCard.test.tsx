@@ -5,28 +5,13 @@ import { addToCart, removeFromCart, removeOneUnit } from "@/redux/features/cartS
 
 import { CartProductCard } from "@/components/CartProductCard/CartProductCard";
 
-import { CartProduct } from "@/types/product.interface";
+import { mockCartProduct } from "@/mocks/product";
 
 jest.mock("react-redux", () => ({
     useDispatch: jest.fn(),
 }));
 
-const mockCartProduct: CartProduct = {
-    product: {
-        id: 0,
-        title: "Test Product",
-        description: "Some description",
-        slug: "test-product",
-        article: "000000",
-        quantity: 100,
-        subcategoryId: 1,
-        price: 1200,
-        image: "some-image.jpg",
-    },
-    quantity: 3,
-};
-
-describe("CartProductCard", () => {
+describe("CartProductCard (Unit)", () => {
     let mockDispatch: jest.Mock;
 
     beforeEach(() => {

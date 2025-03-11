@@ -45,7 +45,7 @@ export const Item = (product: Product) => {
 
 				{product.quantity <= 0 && (
 					<Link href={`/products/${product.slug}`}>
-						<div className={styles.cardBackgroundTint}></div>
+						<div className={styles.cardBackgroundTint} data-testid="tint-overlay"></div>
 					</Link>
 				)}
 			</Paper>

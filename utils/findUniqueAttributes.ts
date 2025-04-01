@@ -1,7 +1,7 @@
-import { Attribute } from "@/types/attribute.interface";
-import { Category, Subcategory } from "@/types/category.interface";
-import { Product } from "@/types/product.interface";
-import { UniqueAttribute } from "@/types/unique-attribute.interface";
+import { Attribute } from '@/types/attribute.interface';
+import { Category, Subcategory } from '@/types/category.interface';
+import { Product } from '@/types/product.interface';
+import { UniqueAttribute } from '@/types/unique-attribute.interface';
 
 export const findUniqueAttributesInSubcategory = (
 	subcategory: Subcategory,
@@ -10,19 +10,25 @@ export const findUniqueAttributesInSubcategory = (
 	let uniqueAttributes: UniqueAttribute[] = [];
 
 	subcategory.products?.forEach((product: Product) => {
-		const findedProduct = products.find((prod: Product) => prod.id === product.id);
-		findedProduct?.attributes?.forEach((attribute: Attribute) => {
-			const findedAttributeIndex = uniqueAttributes.findIndex(
+		const foundProduct = products.find(
+			(prod: Product) => prod.id === product.id
+		);
+		foundProduct?.attributes?.forEach((attribute: Attribute) => {
+			const foundAttributeIdx = uniqueAttributes.findIndex(
 				(pair) => pair.attrId === attribute.attributeId
 			);
-			if (findedAttributeIndex === -1) {
+			if (foundAttributeIdx === -1) {
 				uniqueAttributes.push({
 					attrId: attribute.attributeId,
 					values: [attribute.attributeValue],
 				});
 			} else {
-				!uniqueAttributes[findedAttributeIndex].values.includes(attribute.attributeValue) &&
-					uniqueAttributes[findedAttributeIndex].values.push(attribute.attributeValue);
+				!uniqueAttributes[foundAttributeIdx].values.includes(
+					attribute.attributeValue
+				) &&
+					uniqueAttributes[foundAttributeIdx].values.push(
+						attribute.attributeValue
+					);
 			}
 		});
 	});
@@ -40,21 +46,27 @@ export const findUniqueAttributesInCategory = (
 	if (!products) return [] as UniqueAttribute[];
 
 	category.subcategories?.forEach((subcat) => {
-		const findedSubcat = subcategories.find((sub) => sub.id === subcat.id);
-		findedSubcat?.products?.forEach((product) => {
-			const findedProduct = products.find((prod: Product) => prod.id === product.id);
-			findedProduct?.attributes?.forEach((attribute: Attribute) => {
-				const findedAttributeIndex = uniqueAttributes.findIndex(
+		const foundSubcat = subcategories.find((sub) => sub.id === subcat.id);
+		foundSubcat?.products?.forEach((product) => {
+			const foundProduct = products.find(
+				(prod: Product) => prod.id === product.id
+			);
+			foundProduct?.attributes?.forEach((attribute: Attribute) => {
+				const foundAttributeIdx = uniqueAttributes.findIndex(
 					(pair) => pair.attrId === attribute.attributeId
 				);
-				if (findedAttributeIndex === -1) {
+				if (foundAttributeIdx === -1) {
 					uniqueAttributes.push({
 						attrId: attribute.attributeId,
 						values: [attribute.attributeValue],
 					});
 				} else {
-					!uniqueAttributes[findedAttributeIndex].values.includes(attribute.attributeValue) &&
-						uniqueAttributes[findedAttributeIndex].values.push(attribute.attributeValue);
+					!uniqueAttributes[foundAttributeIdx].values.includes(
+						attribute.attributeValue
+					) &&
+						uniqueAttributes[foundAttributeIdx].values.push(
+							attribute.attributeValue
+						);
 				}
 			});
 		});

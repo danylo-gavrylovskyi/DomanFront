@@ -4,9 +4,9 @@ import { Paper } from "@mui/material";
 
 import { Product } from "@/types/product.interface";
 
-import styles from "./FindedProduct.module.scss";
+import styles from "./HeaderProduct.module.scss";
 
-export const FindedProduct = (product: Product) => {
+export const HeaderProduct = (product: Product) => {
 	return (
 		<Link href={`products/${product.slug}`}>
 			<Paper elevation={3} className={styles.container}>

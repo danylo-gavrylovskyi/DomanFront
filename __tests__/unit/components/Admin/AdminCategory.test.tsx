@@ -12,14 +12,12 @@ describe("AdminCategory (Unit)", () => {
     } as const;
     const placeholderText = "Введіть нову назву";
     const labelText = "Нова обкладинка";
-    const formLabel = "Edit category form";
 
-    const mockProps = {
+    const mockAdminCategoryProps = {
         ...mockCategory,
         edit: jest.fn(),
         deleteItem: jest.fn(),
     };
-
     const mockSubcategoryProps = {
         ...mockSubcategory,
         subcategoryParent: {
@@ -39,21 +37,21 @@ describe("AdminCategory (Unit)", () => {
 
     describe("Category rendering", () => {
         it("renders category with correct image URL", () => {
-            render(<AdminCategory {...mockProps} />);
+            render(<AdminCategory {...mockAdminCategoryProps} />);
 
             const image = screen.getByRole("img");
             expect(image).toBeInTheDocument();
-            expect(image).toHaveAttribute("src", `${process.env.NEXT_PUBLIC_API_URL}/uploads/categoriesImages/${mockProps.image}`);
+            expect(image).toHaveAttribute("src", `${process.env.NEXT_PUBLIC_API_URL}/uploads/categoriesImages/${mockAdminCategoryProps.image}`);
         });
 
         it("renders category title", () => {
-            render(<AdminCategory {...mockProps} />);
+            render(<AdminCategory {...mockAdminCategoryProps} />);
 
-            expect(screen.getByText(mockProps.title)).toBeInTheDocument();
+            expect(screen.getByText(mockAdminCategoryProps.title)).toBeInTheDocument();
         });
 
         it("renders edit and delete buttons", () => {
-            render(<AdminCategory {...mockProps} />);
+            render(<AdminCategory {...mockAdminCategoryProps} />);
 
             expect(screen.getByText(BUTTON_TEXTS.EDIT)).toBeInTheDocument();
             expect(screen.getByText(BUTTON_TEXTS.DELETE)).toBeInTheDocument();
@@ -78,7 +76,7 @@ describe("AdminCategory (Unit)", () => {
 
     describe("Edit mode", () => {
         it("shows edit form when edit button is clicked", () => {
-            render(<AdminCategory {...mockProps} />);
+            render(<AdminCategory {...mockAdminCategoryProps} />);
 
             act(() => {
                 fireEvent.click(screen.getByText(BUTTON_TEXTS.EDIT));
@@ -90,19 +88,21 @@ describe("AdminCategory (Unit)", () => {
         });
 
         it("hides image and title when in edit mode", () => {
-            render(<AdminCategory {...mockProps} />);
+            render(<AdminCategory {...mockAdminCategoryProps} />);
 
             act(() => {
                 fireEvent.click(screen.getByText(BUTTON_TEXTS.EDIT));
             });
 
             expect(screen.queryByRole("img")).not.toBeInTheDocument();
-            const titleElement = screen.getByText(mockProps.title);
+            const titleElement = screen.getByText(mockAdminCategoryProps.title);
             expect(titleElement).toHaveStyle({ display: "none" });
         });
 
         it("submits form with new title and image", async () => {
-            render(<AdminCategory {...mockProps} />);
+            const formLabel = "Edit category form";
+
+            render(<AdminCategory {...mockAdminCategoryProps} />);
 
             // Enter edit mode
             act(() => {
@@ -133,8 +133,8 @@ describe("AdminCategory (Unit)", () => {
                 await new Promise(resolve => setTimeout(resolve, 0));
             });
 
-            expect(mockProps.edit).toHaveBeenCalledWith({
-                id: mockProps.id,
+            expect(mockAdminCategoryProps.edit).toHaveBeenCalledWith({
+                id: mockAdminCategoryProps.id,
                 formData: expect.any(FormData),
             });
         });
@@ -142,14 +142,14 @@ describe("AdminCategory (Unit)", () => {
 
     describe("Delete functionality", () => {
         it("calls deleteItem with correct id when delete button is clicked", () => {
-            render(<AdminCategory {...mockProps} />);
+            render(<AdminCategory {...mockAdminCategoryProps} />);
 
             act(() => {
                 fireEvent.click(screen.getByText(BUTTON_TEXTS.DELETE));
             });
 
-            expect(mockProps.deleteItem).toHaveBeenCalledTimes(1);
-            expect(mockProps.deleteItem).toHaveBeenCalledWith(mockProps.id);
+            expect(mockAdminCategoryProps.deleteItem).toHaveBeenCalledTimes(1);
+            expect(mockAdminCategoryProps.deleteItem).toHaveBeenCalledWith(mockAdminCategoryProps.id);
         });
     });
 }); 

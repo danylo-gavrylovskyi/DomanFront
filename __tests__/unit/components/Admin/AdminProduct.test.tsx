@@ -33,7 +33,6 @@ describe("AdminProduct (Unit)", () => {
         EDIT: "Змінити",
         DELETE: "Видалити",
     } as const;
-
     const UNITS = {
         QUANTITY: "шт.",
         PRICE: "грн",

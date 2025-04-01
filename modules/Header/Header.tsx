@@ -15,7 +15,7 @@ import { Category } from "@/types/category.interface";
 import { Product } from "@/types/product.interface";
 
 import { Auth } from "../Auth/Auth";
-import { FindedProducts } from "./FindedProducts/FindedProducts";
+import { HeaderProducts } from "./HeaderProducts/HeaderProducts";
 import { MobileSearch } from "../MobileSearch/MobileSearch";
 import { DropdownCategory } from "@/components/DropdownCategory/DropdownCategory";
 
@@ -27,7 +27,7 @@ export const Header: React.FC<{ products: Product[] }> = ({ products }) => {
 	const [inputValue, setInputValue] = React.useState<string>("");
 	const [isAuthClicked, toggleAuth] = React.useState<boolean>(false);
 
-	const findedProducts = products
+	const foundProducts = products
 		.filter((product) => product.title.toLowerCase().includes(inputValue.toLowerCase()))
 		.slice(0, 4);
 
@@ -106,7 +106,7 @@ export const Header: React.FC<{ products: Product[] }> = ({ products }) => {
 					</svg>
 				</div>
 
-				{inputValue && <FindedProducts products={findedProducts} />}
+				{inputValue && <HeaderProducts products={foundProducts} />}
 
 				<section className={`${styles.centerFlex} ${styles.userBtns}`}>
 					<svg

@@ -21,7 +21,7 @@ describe("AdminPageLayout (Unit)", () => {
     } as const;
     const categoryLabel = "Категорія";
 
-    const mockProps = {
+    const mockAdminPageProps = {
         isAdding: false,
         onSaveForm: jest.fn(),
         changeAddingMode: jest.fn(),
@@ -42,7 +42,7 @@ describe("AdminPageLayout (Unit)", () => {
 
     describe("Basic rendering", () => {
         it("renders create button when not in adding mode", () => {
-            render(<AdminPageLayout {...mockProps} />);
+            render(<AdminPageLayout {...mockAdminPageProps} />);
 
             const createButton = screen.getByText(BUTTON_TEXTS.CREATE);
             const saveButton = screen.getByText(BUTTON_TEXTS.SAVE);
@@ -54,7 +54,7 @@ describe("AdminPageLayout (Unit)", () => {
         });
 
         it("renders save button when in adding mode", () => {
-            render(<AdminPageLayout {...mockProps} isAdding={true} />);
+            render(<AdminPageLayout {...mockAdminPageProps} isAdding={true} />);
 
             const createButton = screen.getByText(BUTTON_TEXTS.CREATE);
             const saveButton = screen.getByText(BUTTON_TEXTS.SAVE);
@@ -66,7 +66,7 @@ describe("AdminPageLayout (Unit)", () => {
         });
 
         it("renders children content", () => {
-            render(<AdminPageLayout {...mockProps} />);
+            render(<AdminPageLayout {...mockAdminPageProps} />);
 
             expect(screen.getByTestId("test-content")).toBeInTheDocument();
             expect(screen.getByTestId("mock-pagination")).toBeInTheDocument();
@@ -76,7 +76,7 @@ describe("AdminPageLayout (Unit)", () => {
     describe("Form inputs", () => {
         it("renders title input when isInputNeeded is true", () => {
             const inputText = "Enter title";
-            render(<AdminPageLayout {...mockProps} isAdding={true} isInputNeeded={true} inputText={inputText} />);
+            render(<AdminPageLayout {...mockAdminPageProps} isAdding={true} isInputNeeded={true} inputText={inputText} />);
 
             const input = screen.getByPlaceholderText(inputText);
             expect(input).toBeInTheDocument();
@@ -86,7 +86,7 @@ describe("AdminPageLayout (Unit)", () => {
         it("renders category select when isSelectNeeded is true", () => {
             render(
                 <AdminPageLayout
-                    {...mockProps}
+                    {...mockAdminPageProps}
                     isAdding={true}
                     isSelectNeeded={true}
                     categories={mockCategories}
@@ -111,7 +111,7 @@ describe("AdminPageLayout (Unit)", () => {
             const insertImgText = "Insert image";
             render(
                 <AdminPageLayout
-                    {...mockProps}
+                    {...mockAdminPageProps}
                     isAdding={true}
                     isImageInputNeeded={true}
                     insertImgText={insertImgText}
@@ -127,24 +127,24 @@ describe("AdminPageLayout (Unit)", () => {
 
     describe("Form interactions", () => {
         it("calls changeAddingMode when create button is clicked", () => {
-            render(<AdminPageLayout {...mockProps} />);
+            render(<AdminPageLayout {...mockAdminPageProps} />);
 
             act(() => {
                 fireEvent.click(screen.getByText(BUTTON_TEXTS.CREATE));
             });
 
-            expect(mockProps.changeAddingMode).toHaveBeenCalledTimes(1);
+            expect(mockAdminPageProps.changeAddingMode).toHaveBeenCalledTimes(1);
         });
 
         it("calls onSaveForm when form is submitted", () => {
-            render(<AdminPageLayout {...mockProps} isAdding={true} />);
+            render(<AdminPageLayout {...mockAdminPageProps} isAdding={true} />);
 
             const form = screen.getByRole("form", { name: /admin form/i });
             act(() => {
                 fireEvent.submit(form);
             });
 
-            expect(mockProps.onSaveForm).toHaveBeenCalledTimes(1);
+            expect(mockAdminPageProps.onSaveForm).toHaveBeenCalledTimes(1);
         });
     });
 }); 

@@ -48,30 +48,30 @@ const page = () => {
 	const { data: attributes } = useGetAttributes();
 	const { data: products } = useGetProductsWithPagination();
 
-	let findedProducts = products ? products : ({} as PaginationProducts);
+	let foundProducts = products ? products : ({} as PaginationProducts);
 
 	if (page && perPage) {
-		findedProducts.rows = useGetProductsWithPagination({ page, perPage }).data?.rows.filter(
+		foundProducts.rows = useGetProductsWithPagination({ page, perPage }).data?.rows.filter(
 			(product: Product) => product.subcategory?.categoryId === category?.id
 		) as Product[];
 	} else {
-		findedProducts.rows = useGetProductsWithPagination().data?.rows.filter(
+		foundProducts.rows = useGetProductsWithPagination().data?.rows.filter(
 			(product: Product) => product.subcategory?.categoryId === category?.id
 		) as Product[];
 	}
 
-	if (!category || !attributes || !findedProducts || !subcategories || !products) {
+	if (!category || !attributes || !foundProducts || !subcategories || !products) {
 		return <SkeletonPage />;
 	}
 
 	let uniqueAttributes: UniqueAttribute[] = findUniqueAttributesInCategory(
 		category,
 		subcategories,
-		findedProducts.rows
+		foundProducts.rows
 	);
 
 	if (checkedAttributes.length > 0) {
-		findedProducts.rows = findedProducts.rows.filter((product) =>
+		foundProducts.rows = foundProducts.rows.filter((product) =>
 			product.attributes?.some((attr) => checkedAttributes.includes(attr.attributeValue))
 		) as Product[];
 	}
@@ -139,7 +139,7 @@ const page = () => {
 					))}
 				</aside>
 				<main className={styles.products}>
-					{findedProducts.rows.map((product) => (
+					{foundProducts.rows.map((product) => (
 						<Item key={product.id} {...product} />
 					))}
 				</main>
@@ -148,9 +148,9 @@ const page = () => {
 				<Pagination
 					pageQuantity={
 						perPage
-							? findedProducts.count / +perPage < 1
+							? foundProducts.count / +perPage < 1
 								? 1
-								: Math.round(findedProducts.count / +perPage)
+								: Math.round(foundProducts.count / +perPage)
 							: 1
 					}
 					currentPage={page ? +page : 1}

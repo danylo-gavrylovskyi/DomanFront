@@ -8,27 +8,26 @@ import { Category, Subcategory } from "@/types/category.interface";
 import styles from "./AdminCategory.module.scss";
 
 interface AdminCategoryProps extends Category {
-	imageFolder?: string;
 	subcategoryParent?: Category;
 	edit:
-		| UseMutateFunction<
-				Category,
-				unknown,
-				{
-					id: number;
-					formData: FormData;
-				},
-				unknown
-		  >
-		| UseMutateFunction<
-				Subcategory,
-				unknown,
-				{
-					id: number;
-					formData: FormData;
-				},
-				unknown
-		  >;
+	| UseMutateFunction<
+		Category,
+		unknown,
+		{
+			id: number;
+			formData: FormData;
+		},
+		unknown
+	>
+	| UseMutateFunction<
+		Subcategory,
+		unknown,
+		{
+			id: number;
+			formData: FormData;
+		},
+		unknown
+	>;
 	deleteItem: UseMutateFunction<number, unknown, number, unknown>;
 }
 
@@ -38,7 +37,6 @@ export const AdminCategory = ({
 	image,
 	edit,
 	deleteItem,
-	imageFolder = "categoriesImages",
 	subcategoryParent,
 }: AdminCategoryProps) => {
 	const { register, handleSubmit } = useForm<{ title: string }>();
@@ -62,14 +60,15 @@ export const AdminCategory = ({
 			<img
 				style={isEditing ? { display: "none" } : { display: "block" }}
 				width={"8%"}
-				src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/${
-					subcategoryParent ? "subcategoriesImages" : "categoriesImages"
-				}/${image}`}></img>
+				src={`${process.env.NEXT_PUBLIC_API_URL}/uploads/${subcategoryParent ? "subcategoriesImages" : "categoriesImages"
+					}/${image}`}></img>
 
 			<form
 				style={isEditing ? { display: "flex" } : {}}
 				className={styles.form}
-				onSubmit={handleSubmit(onSaveEditCategory)}>
+				onSubmit={handleSubmit(onSaveEditCategory)}
+				role="form"
+				aria-label="Edit category form">
 				<label className={styles.newImgLabel} htmlFor="newCategoryImg">
 					Нова обкладинка
 					<input

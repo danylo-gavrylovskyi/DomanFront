@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 
 import { Attribute } from "@/types/attribute.interface";
 
-import { AdminPageLayout } from "@/components/Admin/AdminPageLayout/AdminPageLayout";
+import { AdminPageLayout } from "@/modules/Admin/AdminPageLayout/AdminPageLayout";
 import { AdminAttribute } from "@/components/Admin/AdminAttribute/AdminAttribute";
 
 import {

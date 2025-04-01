@@ -43,7 +43,7 @@ export const AdminPageLayout = ({
 	return (
 		<>
 			<header className={styles.header}>
-				<form onSubmit={onSaveForm}>
+				<form onSubmit={onSaveForm} aria-label="admin form">
 					<button
 						type="button"
 						style={isAdding ? { display: "none" } : { display: "block" }}

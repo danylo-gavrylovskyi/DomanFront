@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { useAddBanner, useDeleteBanner, useGetBannersWithPagination } from "@/hooks/banners.hooks";
 
 import { AdminBanner } from "@/components/Admin/AdminBanner/AdminBanner";
-import { AdminPageLayout } from "@/components/Admin/AdminPageLayout/AdminPageLayout";
+import { AdminPageLayout } from "@/modules/Admin/AdminPageLayout/AdminPageLayout";
 
 const Banners = () => {
 	const queryParams = useSearchParams();

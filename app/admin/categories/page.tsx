@@ -12,7 +12,7 @@ import {
 } from "@/hooks/categories.hooks";
 
 import { AdminCategory } from "@/components/Admin/AdminCategory/AdminCategory";
-import { AdminPageLayout } from "@/components/Admin/AdminPageLayout/AdminPageLayout";
+import { AdminPageLayout } from "@/modules/Admin/AdminPageLayout/AdminPageLayout";
 
 import { Category } from "@/types/category.interface";
 

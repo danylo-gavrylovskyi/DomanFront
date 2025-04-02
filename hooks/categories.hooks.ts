@@ -1,6 +1,6 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from '@tanstack/react-query';
 
-import { CategoriesService } from "@/services/categories.service";
+import { CategoriesService } from '@/services/categories.service';
 
 import {
 	ADD_CATEGORY_KEY,
@@ -8,10 +8,10 @@ import {
 	EDIT_CATEGORY_KEY,
 	GET_CATEGORIES_KEY,
 	GET_CATEGORIES_WITH_PAGINATION_KEY,
-} from "@/types/constants/react-query-keys.constants";
-import { Pagination } from "@/types/pagination.interface";
+} from '@/types/constants/react-query-keys.constants';
+import { Pagination } from '@/types/pagination.interface';
 
-import { queryClient } from "@/components/LayoutProvider";
+import { queryClient } from '@/providers/LayoutProvider';
 
 export const useGetCategoriesWithPagination = (queryParams?: Pagination) => {
 	return useQuery([GET_CATEGORIES_WITH_PAGINATION_KEY, queryParams], () =>
@@ -24,11 +24,15 @@ export const useGetCategories = () => {
 };
 
 export const useAddCategory = () => {
-	return useMutation([ADD_CATEGORY_KEY], (formData: FormData) => CategoriesService.add(formData), {
-		onSuccess() {
-			queryClient.invalidateQueries({ queryKey: [GET_CATEGORIES_KEY] });
-		},
-	});
+	return useMutation(
+		[ADD_CATEGORY_KEY],
+		(formData: FormData) => CategoriesService.add(formData),
+		{
+			onSuccess() {
+				queryClient.invalidateQueries({ queryKey: [GET_CATEGORIES_KEY] });
+			},
+		}
+	);
 };
 
 export const useEditCategory = () => {

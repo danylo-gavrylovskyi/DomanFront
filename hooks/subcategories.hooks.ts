@@ -1,8 +1,8 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from '@tanstack/react-query';
 
-import { SubcategoriesService } from "@/services/subcategories.service";
+import { SubcategoriesService } from '@/services/subcategories.service';
 
-import { queryClient } from "@/components/LayoutProvider";
+import { queryClient } from '@/providers/LayoutProvider';
 
 import {
 	ADD_SUBCATEGORY_KEY,
@@ -10,8 +10,8 @@ import {
 	EDIT_SUBCATEGORY_KEY,
 	GET_SUBCATEGORIES_KEY,
 	GET_SUBCATEGORIES_WITH_PAGINATION_KEY,
-} from "@/types/constants/react-query-keys.constants";
-import { Pagination } from "@/types/pagination.interface";
+} from '@/types/constants/react-query-keys.constants';
+import { Pagination } from '@/types/pagination.interface';
 
 export const useGetSubcategoriesWithPagination = (queryParams?: Pagination) => {
 	return useQuery([GET_SUBCATEGORIES_WITH_PAGINATION_KEY, queryParams], () =>
@@ -20,7 +20,9 @@ export const useGetSubcategoriesWithPagination = (queryParams?: Pagination) => {
 };
 
 export const useGetSubcategories = () => {
-	return useQuery([GET_SUBCATEGORIES_KEY], () => SubcategoriesService.getAll());
+	return useQuery([GET_SUBCATEGORIES_KEY], () =>
+		SubcategoriesService.getAll()
+	);
 };
 
 export const useAddSubcategory = () => {
@@ -29,7 +31,9 @@ export const useAddSubcategory = () => {
 		(formData: FormData) => SubcategoriesService.add(formData),
 		{
 			onSuccess() {
-				queryClient.invalidateQueries({ queryKey: [GET_SUBCATEGORIES_KEY] });
+				queryClient.invalidateQueries({
+					queryKey: [GET_SUBCATEGORIES_KEY],
+				});
 			},
 		}
 	);
@@ -43,7 +47,9 @@ export const useEditSubcategory = () => {
 			SubcategoriesService.edit({ id, formData }),
 		{
 			onSuccess() {
-				queryClient.invalidateQueries({ queryKey: [GET_SUBCATEGORIES_KEY] });
+				queryClient.invalidateQueries({
+					queryKey: [GET_SUBCATEGORIES_KEY],
+				});
 			},
 		}
 	);
@@ -56,7 +62,9 @@ export const useDeleteSubcategory = () => {
 		(subcategoryId: number) => SubcategoriesService.delete(subcategoryId),
 		{
 			onSuccess() {
-				queryClient.invalidateQueries({ queryKey: [GET_SUBCATEGORIES_KEY] });
+				queryClient.invalidateQueries({
+					queryKey: [GET_SUBCATEGORIES_KEY],
+				});
 			},
 		}
 	);

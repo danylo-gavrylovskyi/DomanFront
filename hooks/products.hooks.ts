@@ -1,8 +1,8 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from '@tanstack/react-query';
 
-import { ProductsService } from "@/services/products.service";
+import { ProductsService } from '@/services/products.service';
 
-import { queryClient } from "@/components/LayoutProvider";
+import { queryClient } from '@/providers/LayoutProvider';
 
 import {
 	ADD_PRODUCT_KEY,
@@ -11,9 +11,9 @@ import {
 	GET_PRODUCTS_KEY,
 	GET_PRODUCTS_WITH_PAGINATION_KEY,
 	USE_EXCEL_TABLE,
-} from "@/types/constants/react-query-keys.constants";
-import { Pagination } from "@/types/pagination.interface";
-import { FindOptions } from "@/types/findOptions.interface";
+} from '@/types/constants/react-query-keys.constants';
+import { Pagination } from '@/types/pagination.interface';
+import { FindOptions } from '@/types/findOptions.interface';
 
 export const useGetProductsWithPagination = (queryParams?: Pagination) => {
 	return useQuery([GET_PRODUCTS_WITH_PAGINATION_KEY, queryParams], () =>
@@ -22,7 +22,9 @@ export const useGetProductsWithPagination = (queryParams?: Pagination) => {
 };
 
 export const useGetProducts = (queryParams?: FindOptions) => {
-	return useQuery([GET_PRODUCTS_KEY, queryParams], () => ProductsService.getAll(queryParams));
+	return useQuery([GET_PRODUCTS_KEY, queryParams], () =>
+		ProductsService.getAll(queryParams)
+	);
 };
 
 export const useAddProduct = () => {
